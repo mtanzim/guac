@@ -37,8 +37,10 @@ func putData(item *Item, svc *dynamodb.DynamoDB, tableName string, wg *sync.Wait
 
 func PutData(data map[string]interface{}) {
 	// log.Println(data)
+	region := os.Getenv("DYNAMO_REGION")
+
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1"),
+		Region: aws.String(region),
 	})
 	if err != nil {
 		log.Panicln(err)

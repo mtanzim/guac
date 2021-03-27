@@ -19,12 +19,13 @@ func main() {
 	data := wakaApi.TransformData()
 	dailyStats := processData.DailyTotal(data)
 	start, end := processData.GetDateRange(dailyStats)
-	plotData.DailyBarChart(dailyStats)
 
 	langStats := processData.LanguageSummary(data)
 	log.Println(start, end)
 	utils.PrettyPrint(dailyStats)
 	utils.PrettyPrint(langStats.Durations)
 	utils.PrettyPrint(langStats.Percentages)
+	plotData.DailyBarChart(dailyStats)
+	plotData.LanguagePie(langStats.Percentages)
 
 }

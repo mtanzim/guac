@@ -1,9 +1,7 @@
 package processData
 
 import (
-	"errors"
 	"log"
-	"math"
 	"sort"
 )
 
@@ -51,6 +49,33 @@ func languageDuration(input map[string]interface{}) map[string]float64 {
 	return languageSummary
 }
 
+func cleanLangPct(sortedLangPct []LangPct) []LangPct {
+	i := 0
+	totalPct := 0.0
+	undesiredLangsSet := make(map[string]interface{})
+	for _, v := range [...]string{"JSON", "Other", "HTML", "YAML", "Markdown"} {
+		undesiredLangsSet[v] = nil
+	}
+	var topLangPct []LangPct
+	for _, pct := range sortedLangPct {
+		if i == MAX_LANG_COUNT {
+			break
+		}
+		if _, ok := undesiredLangsSet[pct.Name]; ok {
+			continue
+		}
+		topLangPct = append(topLangPct, pct)
+		totalPct += pct.Pct
+		i += 1
+	}
+	remainingPct := 100 - totalPct
+	if i < len(sortedLangPct)-1 {
+		topLangPct = append(topLangPct, LangPct{Name: "Other", Pct: remainingPct})
+	}
+	return topLangPct
+
+}
+
 func languagePct(durations map[string]float64) ([]LangPct, error) {
 	var percentages []LangPct
 	totalDur := 0.0
@@ -64,13 +89,11 @@ func languagePct(durations map[string]float64) ([]LangPct, error) {
 		pctTotal += curPct
 		percentages = append(percentages, LangPct{k, curPct})
 	}
-	if epsilon := 0.000000001; math.Abs(pctTotal-100) > epsilon {
-		return nil, errors.New("Pct calculation errors")
-	}
 	sort.Slice(percentages, func(i, j int) bool {
 		return percentages[i].Pct > percentages[j].Pct
 	})
-	return percentages, nil
+
+	return cleanLangPct(percentages), nil
 }
 
 func transformDurationsMap(durations map[string]float64) []LangDur {

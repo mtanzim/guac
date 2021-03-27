@@ -23,6 +23,8 @@ type LangPct struct {
 	Pct  float64
 }
 
+const MAX_LANG_COUNT = 5
+
 // TODO: this shit ugly, is it idiomatic?
 func languageDuration(input map[string]interface{}) map[string]float64 {
 	languageSummary := make(map[string]float64)
@@ -56,11 +58,11 @@ func languagePct(durations map[string]float64) ([]LangPct, error) {
 		totalDur += v
 	}
 	pctTotal := 0.0
+
 	for k, v := range durations {
 		curPct := (v / totalDur) * 100.0
 		pctTotal += curPct
 		percentages = append(percentages, LangPct{k, curPct})
-
 	}
 	if epsilon := 0.000000001; math.Abs(pctTotal-100) > epsilon {
 		return nil, errors.New("Pct calculation errors")

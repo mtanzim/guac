@@ -25,15 +25,14 @@ func generatePieItems() []opts.PieData {
 func LanguagePie(langPcts []processData.LangPct) {
 	colors := NewColors()
 	pie := charts.NewPie()
-	pie.SetGlobalOptions(
-		charts.WithTitleOpts(opts.Title{Title: "basic pie example"}),
-	)
 	pie.SetGlobalOptions(charts.WithTitleOpts(
 		opts.Title{
 			Title: "Languages used",
 			Left:  "center",
 		},
-	))
+	),
+		charts.WithLegendOpts(opts.Legend{Orient: "vertical", Show: true, Left: "left"}),
+	)
 
 	var items []opts.PieData
 	for _, v := range langPcts {
@@ -45,7 +44,11 @@ func LanguagePie(langPcts []processData.LangPct) {
 			})
 	}
 
-	pie.AddSeries("pie", items)
+	pie.AddSeries("pie", items).SetSeriesOptions(
+		charts.WithPieChartOpts(opts.PieChart{
+			Radius: []string{"40%", "75%"},
+		}),
+	)
 	f, _ := os.Create("pie.html")
 	pie.Render(f)
 }

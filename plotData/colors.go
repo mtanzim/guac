@@ -11,11 +11,10 @@ type LanguageColors struct {
 	Colors map[string]string
 }
 
-const DEFAULT_COLOR = "#800080"
+const DEFAULT_COLOR = "#737373"
 
 func (c LanguageColors) GetColor(name string) string {
 	if curColor, ok := c.Colors[name]; ok {
-		log.Println(curColor)
 		return curColor
 	} else {
 		return DEFAULT_COLOR
@@ -39,7 +38,13 @@ func NewColors() *LanguageColors {
 
 	colors := make(map[string]string)
 	for k, v := range result {
-		colors[k] = v.(string)
+		curColor := v.(map[string]interface{})["color"]
+		switch cv := curColor.(type) {
+		case string:
+			colors[k] = cv
+		default:
+			colors[k] = DEFAULT_COLOR
+		}
 	}
 	return &LanguageColors{colors}
 

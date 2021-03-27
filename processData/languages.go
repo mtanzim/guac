@@ -7,6 +7,22 @@ import (
 	"sort"
 )
 
+type LanguageStat struct {
+	Durations   []LangDur
+	Percentages []LangPct
+}
+
+type LangDur struct {
+	Name string
+	// minutes
+	Duration float64
+}
+
+type LangPct struct {
+	Name string
+	Pct  float64
+}
+
 // TODO: this shit ugly, is it idiomatic?
 func languageDuration(input map[string]interface{}) map[string]float64 {
 	languageSummary := make(map[string]float64)
@@ -18,11 +34,12 @@ func languageDuration(input map[string]interface{}) map[string]float64 {
 				switch ll := lang.(type) {
 				case map[string]interface{}:
 					languageName := ll["name"].(string)
-					languageDuration := ll["total_seconds"].(float64)
+					languageDurationInSec := ll["total_seconds"].(float64)
+					languageDurationInMin := languageDurationInSec / 60.0
 					if val, ok := languageSummary[languageName]; ok {
-						languageSummary[languageName] = val + languageDuration
+						languageSummary[languageName] = val + languageDurationInMin
 					} else {
-						languageSummary[languageName] = languageDuration
+						languageSummary[languageName] = languageDurationInMin
 					}
 				}
 
@@ -30,11 +47,6 @@ func languageDuration(input map[string]interface{}) map[string]float64 {
 		}
 	}
 	return languageSummary
-}
-
-type LangPct struct {
-	Name string
-	Pct  float64
 }
 
 func languagePct(durations map[string]float64) ([]LangPct, error) {
@@ -57,16 +69,6 @@ func languagePct(durations map[string]float64) ([]LangPct, error) {
 		return percentages[i].Pct > percentages[j].Pct
 	})
 	return percentages, nil
-}
-
-type LanguageStat struct {
-	Durations   []LangDur
-	Percentages []LangPct
-}
-
-type LangDur struct {
-	Name     string
-	Duration float64
 }
 
 func transformDurationsMap(durations map[string]float64) []LangDur {

@@ -2,7 +2,8 @@ package main
 
 import (
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/mtanzim/guac/dynamo"
+	"github.com/mtanzim/guac/processData"
+	"github.com/mtanzim/guac/utils"
 	"github.com/mtanzim/guac/wakaApi"
 )
 
@@ -13,5 +14,10 @@ type Item struct {
 
 func main() {
 	data := wakaApi.TransformData()
-	dynamo.PutData(data)
+	dailyStats := processData.DailyTotal(data)
+	langStats := processData.LanguageSummary(data)
+	utils.PrettyPrint(dailyStats)
+	utils.PrettyPrint(langStats.Durations)
+	utils.PrettyPrint(langStats.Percentages)
+
 }

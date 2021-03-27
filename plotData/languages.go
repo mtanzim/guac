@@ -23,6 +23,7 @@ func generatePieItems() []opts.PieData {
 }
 
 func LanguagePie(langPcts []processData.LangPct) {
+	colors := NewColors()
 	pie := charts.NewPie()
 	pie.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: "basic pie example"}),
@@ -31,11 +32,17 @@ func LanguagePie(langPcts []processData.LangPct) {
 		opts.Title{
 			Title: "Languages used",
 			Left:  "center",
-		}))
+		},
+	))
 
 	var items []opts.PieData
 	for _, v := range langPcts {
-		items = append(items, opts.PieData{Name: v.Name, Value: v.Pct})
+		items = append(items,
+			opts.PieData{
+				Name:      v.Name,
+				Value:     v.Pct,
+				ItemStyle: &opts.ItemStyle{Color: colors.GetColor(v.Name)},
+			})
 	}
 
 	pie.AddSeries("pie", items)

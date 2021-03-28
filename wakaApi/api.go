@@ -45,6 +45,10 @@ func TransformData() map[string]interface{} {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	if v["data"] == nil {
+		log.Panicln(v["error"])
+	}
 	data := v["data"].([]interface{})
 	transformedData := make(map[string]interface{})
 	for _, d := range data {

@@ -52,9 +52,9 @@ func languageDuration(input map[string]interface{}) map[string]float64 {
 func CleanLangPct(sortedLangPct []LangPct) []LangPct {
 	i := 0
 	totalPct := 0.0
-	undesiredLangsSet := make(map[string]interface{})
+	undesiredLangsSet := make(map[string]bool)
 	for _, v := range [...]string{"JSON", "Other", "HTML", "YAML", "Markdown"} {
-		undesiredLangsSet[v] = nil
+		undesiredLangsSet[v] = true
 	}
 	var topLangPct []LangPct
 	for _, pct := range sortedLangPct {

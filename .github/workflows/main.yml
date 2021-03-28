@@ -17,7 +17,7 @@ jobs:
           go-version: 1.16
 
       - name: Build
-        run: go build -o persist
+        run: go build -o persist cmd/persistData/main.go
 
       - name: Run
         run: ./persist

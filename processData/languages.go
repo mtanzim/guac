@@ -49,7 +49,7 @@ func languageDuration(input map[string]interface{}) map[string]float64 {
 	return languageSummary
 }
 
-func cleanLangPct(sortedLangPct []LangPct) []LangPct {
+func CleanLangPct(sortedLangPct []LangPct) []LangPct {
 	i := 0
 	totalPct := 0.0
 	undesiredLangsSet := make(map[string]interface{})
@@ -93,7 +93,7 @@ func languagePct(durations map[string]float64) ([]LangPct, error) {
 		return percentages[i].Pct > percentages[j].Pct
 	})
 
-	return cleanLangPct(percentages), nil
+	return percentages, nil
 }
 
 func transformDurationsMap(durations map[string]float64) []LangDur {

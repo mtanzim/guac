@@ -18,10 +18,11 @@ func main() {
 	start, end := "2020-03-22", "2022-03-25"
 	data := dynamo.GetData(start, end)
 	dailyStats := processData.DailyTotal(data)
+	actualStart, actualEnd := processData.GetDateRange(dailyStats)
 	langStats := processData.LanguageSummary(data)
 	cleanLangPct := processData.CleanLangPct(langStats.Percentages)
-	log.Println(start, end)
-	plotData.DailyBarChart(dailyStats)
-	plotData.LanguagePie(cleanLangPct)
+	log.Println(actualStart, actualEnd)
+	plotData.DailyBarChart(dailyStats, actualStart, actualEnd)
+	plotData.LanguagePie(cleanLangPct, actualStart, actualEnd)
 
 }

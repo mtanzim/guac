@@ -8,13 +8,14 @@ import (
 	"github.com/mtanzim/guac/processData"
 )
 
-func LanguagePie(langPcts []processData.LangPct) {
+func LanguagePie(langPcts []processData.LangPct, start, end string) {
 	colors := NewColors()
 	pie := charts.NewPie()
 	pie.SetGlobalOptions(charts.WithTitleOpts(
 		opts.Title{
-			Title: "Languages used",
-			Left:  "center",
+			Title:    "Languages used",
+			Subtitle: start + " to " + end,
+			Left:     "center",
 		},
 	),
 		charts.WithLegendOpts(opts.Legend{Orient: "vertical", Show: true, Left: "left"}),

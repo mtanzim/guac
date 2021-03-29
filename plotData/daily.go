@@ -8,14 +8,15 @@ import (
 	"github.com/mtanzim/guac/processData"
 )
 
-func DailyBarChart(dailyStats []processData.DailyStat) {
+func DailyBarChart(dailyStats []processData.DailyStat, start, end string) {
 	// create a new bar instance
 	bar := charts.NewBar()
 	// set some global options like Title/Legend/ToolTip or anything else
 	bar.SetGlobalOptions(charts.WithTitleOpts(
 		opts.Title{
-			Title: "My coding activity",
-			Left:  "center",
+			Title:    "My coding activity",
+			Subtitle: start + " to " + end,
+			Left:     "center",
 		}),
 		charts.WithXAxisOpts(opts.XAxis{Name: "Date"}),
 		charts.WithYAxisOpts(opts.YAxis{Name: "Duration (minutes)"}))

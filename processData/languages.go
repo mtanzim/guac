@@ -3,6 +3,8 @@ package processData
 import (
 	"log"
 	"sort"
+
+	"github.com/mtanzim/guac/dynamo"
 )
 
 type LanguageStat struct {
@@ -24,12 +26,17 @@ type LangPct struct {
 const MAX_LANG_COUNT = 5
 
 // TODO: this shit ugly, is it idiomatic?
-func languageDuration(input map[string]interface{}) map[string]float64 {
+func languageDuration(input []dynamo.Item) map[string]float64 {
 	languageSummary := make(map[string]float64)
 	for _, v := range input {
-		switch vv := v.(type) {
+		switch vv := v.Data.(type) {
 		case map[string]interface{}:
+
+			if vv["languages"] == nil {
+				continue
+			}
 			languages := vv["languages"].([]interface{})
+
 			for _, lang := range languages {
 				switch ll := lang.(type) {
 				case map[string]interface{}:
@@ -107,7 +114,7 @@ func transformDurationsMap(durations map[string]float64) []LangDur {
 	return durationsSlc
 }
 
-func LanguageSummary(input map[string]interface{}) LanguageStat {
+func LanguageSummary(input []dynamo.Item) LanguageStat {
 	durations := languageDuration(input)
 	pct, err := languagePct(durations)
 	if err != nil {

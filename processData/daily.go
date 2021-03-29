@@ -3,6 +3,8 @@ package processData
 import (
 	"sort"
 	"time"
+
+	"github.com/mtanzim/guac/dynamo"
 )
 
 type DailyStat struct {
@@ -11,15 +13,15 @@ type DailyStat struct {
 	Duration float64
 }
 
-func DailyTotal(input map[string]interface{}) []DailyStat {
+func DailyTotal(input []dynamo.Item) []DailyStat {
 	var dailyStat []DailyStat
-	for k, v := range input {
-		switch vv := v.(type) {
+	for _, v := range input {
+		switch vv := v.Data.(type) {
 		case map[string]interface{}:
 			grandTotal := vv["grand_total"].(map[string]interface{})
 			grandTotalInSeconds := grandTotal["total_seconds"].(float64)
 			grandTotalInMins := grandTotalInSeconds / 60.0
-			dailyStat = append(dailyStat, DailyStat{k, grandTotalInMins})
+			dailyStat = append(dailyStat, DailyStat{v.Date, grandTotalInMins})
 		default:
 			// Do nothing
 		}
@@ -31,8 +33,4 @@ func DailyTotal(input map[string]interface{}) []DailyStat {
 		return prevDate.Before(curDate)
 	})
 	return dailyStat
-}
-
-func GetDateRange(input []DailyStat) (string, string) {
-	return input[0].Date, input[len(input)-1].Date
 }

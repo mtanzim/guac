@@ -13,17 +13,13 @@ type Item struct {
 }
 
 func main() {
-	// TODO: get from DynamoDB
-	// data := wakaApi.TransformData()
-	data := dynamo.GetData("2021-03-22", "2021-03-25")
+	start, end := "2020-03-22", "2022-03-25"
+	data := dynamo.GetData(start, end)
 	dailyStats := processData.DailyTotal(data)
-	utils.PrettyPrint(dailyStats)
-	// start, end := processData.GetDateRange(dailyStats)
 
-	// langStats := processData.LanguageSummary(data)
-	// log.Println(start, end)
-	// utils.PrettyPrint(dailyStats)
-	// utils.PrettyPrint(langStats.Durations)
-	// utils.PrettyPrint(langStats.Percentages)
+	langStats := processData.LanguageSummary(data)
+	utils.PrettyPrint(dailyStats)
+	utils.PrettyPrint(langStats.Durations)
+	utils.PrettyPrint(langStats.Percentages)
 
 }

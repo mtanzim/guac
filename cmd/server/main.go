@@ -10,5 +10,6 @@ import (
 
 func main() {
 	http.HandleFunc("/data", server.DataController)
+	http.HandleFunc("/plot", server.PlotController)
 	http.ListenAndServe(":"+os.Getenv("REST_PORT"), nil)
 }

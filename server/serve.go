@@ -45,26 +45,29 @@ func validateQueryDate(start, end string) error {
 	return nil
 }
 
-func Data(w http.ResponseWriter, req *http.Request) {
+func DataController(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
 
 	reqStart := req.URL.Query().Get("start")
 	reqEnd := req.URL.Query().Get("end")
 	if err := validateQueryDate(reqStart, reqEnd); err != nil {
+		log.Println(err)
 		errorRv := struct {
 			Error string `json:"error"`
 		}{err.Error()}
 		if err := json.NewEncoder(w).Encode(errorRv); err != nil {
-			log.Fatalln(err)
+			log.Println(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
 		}
 		return
 	}
 
 	rv := dataService(reqStart, reqEnd)
 	if err := json.NewEncoder(w).Encode(rv); err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
-	w.WriteHeader(http.StatusOK)
 }

@@ -8,9 +8,9 @@ import (
 )
 
 type DailyStat struct {
-	Date string
+	Date string `json:"date"`
 	// minutes
-	Duration float64
+	Duration float64 `json:"minutes"`
 }
 
 func DailyTotal(input []dynamo.Item) []DailyStat {

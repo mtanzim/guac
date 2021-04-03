@@ -15,7 +15,7 @@ type Item struct {
 }
 
 func main() {
-	start, end := "2020-03-22", "2022-03-25"
+	start, end := "2020-01-01", "2022-12-31"
 	data := dynamo.GetData(start, end)
 	dailyStats := processData.DailyTotal(data)
 	actualStart, actualEnd := processData.GetDateRange(dailyStats)

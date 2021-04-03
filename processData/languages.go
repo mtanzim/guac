@@ -8,19 +8,19 @@ import (
 )
 
 type LanguageStat struct {
-	Durations   []LangDur
-	Percentages []LangPct
+	Durations   []LangDur `json:"durations"`
+	Percentages []LangPct `json:"percentages"`
 }
 
 type LangDur struct {
-	Name string
+	Name string `json:"language"`
 	// minutes
-	Duration float64
+	Duration float64 `json:"minutes"`
 }
 
 type LangPct struct {
-	Name string
-	Pct  float64
+	Name string  `json:"language"`
+	Pct  float64 `json:"percentage"`
 }
 
 const MAX_LANG_COUNT = 5

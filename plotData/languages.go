@@ -1,14 +1,12 @@
 package plotData
 
 import (
-	"os"
-
 	"github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-echarts/go-echarts/v2/opts"
 	"github.com/mtanzim/guac/processData"
 )
 
-func LanguagePie(langPcts []processData.LangPct, start, end string) {
+func LanguagePie(langStats processData.LanguageStat, start, end string) *charts.Pie {
 	colors := NewColors()
 	pie := charts.NewPie()
 	pie.SetGlobalOptions(charts.WithTitleOpts(
@@ -22,7 +20,7 @@ func LanguagePie(langPcts []processData.LangPct, start, end string) {
 	)
 
 	var items []opts.PieData
-	for _, v := range langPcts {
+	for _, v := range langStats.Percentages {
 		items = append(items,
 			opts.PieData{
 				Name:      v.Name,
@@ -36,6 +34,7 @@ func LanguagePie(langPcts []processData.LangPct, start, end string) {
 			Radius: []string{"40%", "75%"},
 		}),
 	)
-	f, _ := os.Create("pie.html")
-	pie.Render(f)
+	return pie
+	// f, _ := os.Create("pie.html")
+	// pie.Render(f)
 }

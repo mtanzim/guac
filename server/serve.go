@@ -2,8 +2,10 @@ package server
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/mtanzim/guac/dynamo"
 	"github.com/mtanzim/guac/processData"
@@ -12,20 +14,57 @@ import (
 type RV struct {
 	DailyStats []processData.DailyStat  `json:"dailyDuration"`
 	LangStats  processData.LanguageStat `json:"languageStats"`
+	StartDate  string                   `json:"startDate"`
+	EndDate    string                   `json:"endDate"`
 }
 
 func dataService(start, end string) *RV {
 	data := dynamo.GetData(start, end)
 	dailyStats := processData.DailyTotal(data)
+	actualStart, actualEnd := processData.GetDateRange(dailyStats)
 	langStats := processData.LanguageSummary(data)
-	return &RV{dailyStats, langStats}
+	return &RV{DailyStats: dailyStats, LangStats: langStats, StartDate: actualStart, EndDate: actualEnd}
 }
 
-func Hello(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Conten-Type", "application/json; charset=UTF-8")
+func validateQueryDate(start, end string) error {
+	dateLayout := "2006-01-02"
+	timeStart, err := time.Parse(dateLayout, start)
+	if err != nil {
+		return errors.New("Invalid start date")
+	}
+
+	timeEnd, err := time.Parse(dateLayout, end)
+	if err != nil {
+		return errors.New("Invalid end date")
+	}
+
+	if timeEnd.Before(timeStart) {
+		return errors.New("End date is before start date")
+	}
+
+	return nil
+}
+
+func Data(w http.ResponseWriter, req *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
-	rv := dataService("2020-03-22", "2022-03-25")
+
+	reqStart := req.URL.Query().Get("start")
+	reqEnd := req.URL.Query().Get("end")
+	if err := validateQueryDate(reqStart, reqEnd); err != nil {
+		errorRv := struct {
+			Error string `json:"error"`
+		}{err.Error()}
+		if err := json.NewEncoder(w).Encode(errorRv); err != nil {
+			log.Fatalln(err)
+		}
+		return
+	}
+
+	rv := dataService(reqStart, reqEnd)
 	if err := json.NewEncoder(w).Encode(rv); err != nil {
 		log.Fatalln(err)
 	}
+	w.WriteHeader(http.StatusOK)
 }

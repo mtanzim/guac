@@ -36,5 +36,8 @@ func DailyTotal(input []dynamo.Item) []DailyStat {
 }
 
 func GetDateRange(input []DailyStat) (string, string) {
+	if len(input) == 0 {
+		return "", ""
+	}
 	return input[0].Date, input[len(input)-1].Date
 }

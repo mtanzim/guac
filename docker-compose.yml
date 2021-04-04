@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  guac-server:
+    build: ./
+    ports:
+      - "80:${REST_PORT}"
+    environment:
+      BASE_URL: ${BASE_URL}
+      API_KEY: ${API_KEY}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      DYNAMO_TABLE: ${DYNAMO_TABLE}
+      DYNAMO_REGION: ${DYNAMO_REGION}
+      REST_PORT: ${REST_PORT}
+      START: ${START}
+      END: ${END}
+

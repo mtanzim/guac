@@ -12,6 +12,9 @@ import (
 func main() {
 	http.HandleFunc("/data", controllers.DataController)
 	http.HandleFunc("/plot", controllers.PlotController)
+	http.HandleFunc("/", controllers.RootController)
+	http.HandleFunc("/health", controllers.HealthController)
+
 	port := os.Getenv("REST_PORT")
 	if port == "" {
 		log.Fatalln("Please provide env variable for REST_PORT")

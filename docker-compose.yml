@@ -4,7 +4,7 @@ services:
   guac-server:
     build: ./
     ports:
-      - "${REST_PORT}:${REST_PORT}"
+      - "80:${REST_PORT}"
     environment:
       BASE_URL: ${BASE_URL}
       API_KEY: ${API_KEY}
@@ -13,3 +13,6 @@ services:
       DYNAMO_TABLE: ${DYNAMO_TABLE}
       DYNAMO_REGION: ${DYNAMO_REGION}
       REST_PORT: ${REST_PORT}
+      START: ${START}
+      END: ${END}
+

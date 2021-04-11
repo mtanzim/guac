@@ -47,14 +47,14 @@ func GetData(start, end string) []Item {
 	if region == "" {
 		log.Fatalln("Please provide table name")
 	}
-	queryCol, projCol, keyCol := "Date", "Data", "Category"
+	sortCol, projCol, keyCol := "Date", "Data", "Category"
 	startVal := expression.Value(start)
 	endVal := expression.Value(end)
 	keyConditionEq := expression.KeyEqual(expression.Key(keyCol), expression.Value("coding"))
-	sortCondition := expression.KeyBetween(expression.Key(queryCol), startVal, endVal)
+	sortCondition := expression.KeyBetween(expression.Key(sortCol), startVal, endVal)
 	overallQuery := expression.KeyAnd(keyConditionEq, sortCondition)
 
-	proj := expression.NamesList(expression.Name(projCol), expression.Name(queryCol))
+	proj := expression.NamesList(expression.Name(projCol), expression.Name(sortCol))
 	expr, err := expression.NewBuilder().WithKeyCondition(overallQuery).WithProjection(proj).Build()
 	if err != nil {
 		log.Fatalf("Got error building expression: %s", err)

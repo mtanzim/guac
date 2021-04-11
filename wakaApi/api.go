@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/mtanzim/guac/utils"
 )
 
 func getAuthHeader() string {
@@ -32,7 +34,7 @@ func getData() []byte {
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Panicln(err)
+		log.Fatalln(err)
 	}
 	return body
 }
@@ -47,7 +49,8 @@ func TransformData() map[string]interface{} {
 	}
 
 	if v["data"] == nil {
-		log.Panicln(v["error"])
+		utils.PrettyPrint(v)
+		log.Fatalln(v["error"])
 	}
 	data := v["data"].([]interface{})
 	transformedData := make(map[string]interface{})

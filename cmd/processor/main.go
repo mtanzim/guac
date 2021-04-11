@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/mtanzim/guac/dynamo"
@@ -15,7 +16,10 @@ type Item struct {
 }
 
 func main() {
-	start, end := "2020-03-22", "2022-03-25"
+	start, end := os.Getenv("START"), os.Getenv("END")
+	if start == "" || end == "" {
+		log.Fatalln("Please specify start and end dates in .env")
+	}
 	data := dynamo.GetData(start, end)
 	dailyStats := processData.DailyTotal(data)
 	actualStart, actualEnd := processData.GetDateRange(dailyStats)

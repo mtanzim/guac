@@ -11,9 +11,12 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
+const category = "coding"
+
 type Item struct {
-	Date string // primary key
-	Data interface{}
+	Category string // primary key
+	Date     string // sort key
+	Data     interface{}
 }
 
 func putData(item *Item, svc *dynamodb.DynamoDB, tableName string, wg *sync.WaitGroup) {
@@ -21,7 +24,7 @@ func putData(item *Item, svc *dynamodb.DynamoDB, tableName string, wg *sync.Wait
 	av, err := dynamodbattribute.MarshalMap(item)
 	if err != nil {
 		log.Println("Got error marshalling new waka item:")
-		log.Panicln(err.Error())
+		log.Fatalln(err.Error())
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      av,
@@ -30,7 +33,7 @@ func putData(item *Item, svc *dynamodb.DynamoDB, tableName string, wg *sync.Wait
 	_, err = svc.PutItem(input)
 	if err != nil {
 		log.Println("Got error calling PutItem:")
-		log.Panicln(err.Error())
+		log.Fatalln(err.Error())
 	}
 	log.Println("Successfully added/updated date " + item.Date + " to table " + tableName)
 }
@@ -43,14 +46,14 @@ func PutData(data map[string]interface{}) {
 		Region: aws.String(region),
 	})
 	if err != nil {
-		log.Panicln(err)
+		log.Fatalln(err)
 	}
 	svc := dynamodb.New(sess)
 	tableName := os.Getenv("DYNAMO_TABLE")
 	var wg sync.WaitGroup
 	// create the input configuration instance
 	for k, v := range data {
-		item := Item{k, v}
+		item := Item{category, k, v}
 		wg.Add(1)
 		go putData(&item, svc, tableName, &wg)
 	}

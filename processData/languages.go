@@ -118,7 +118,7 @@ func LanguageSummary(input []dynamo.Item) LanguageStat {
 	durations := languageDuration(input)
 	pct, err := languagePct(durations)
 	if err != nil {
-		log.Panicln(err.Error())
+		log.Fatalln(err.Error())
 	}
 	durationsSlc := transformDurationsMap(durations)
 	return LanguageStat{durationsSlc, pct}

@@ -11,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/expression"
 )
 
-func parseResult(result *dynamodb.ScanOutput) []Item {
+func parseResult(result *dynamodb.QueryOutput) []Item {
 
 	var rvItems []Item
 	for _, i := range result.Items {
@@ -29,8 +29,12 @@ func parseResult(result *dynamodb.ScanOutput) []Item {
 }
 
 func GetData(start, end string) []Item {
+
 	// log.Println(data)
 	region := os.Getenv("DYNAMO_REGION")
+	if region == "" {
+		log.Fatalln("Please provide region")
+	}
 
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(region),
@@ -40,27 +44,32 @@ func GetData(start, end string) []Item {
 	}
 	svc := dynamodb.New(sess)
 	tableName := os.Getenv("DYNAMO_TABLE")
-	queryCol, projCol := "Date", "Data"
+	if region == "" {
+		log.Fatalln("Please provide table name")
+	}
+	sortCol, projCol, keyCol := "Date", "Data", "Category"
 	startVal := expression.Value(start)
 	endVal := expression.Value(end)
-	exprGe := expression.Name(queryCol).GreaterThanEqual(startVal)
-	exprLe := expression.Name(queryCol).LessThanEqual(endVal)
-	filt := exprGe.And(exprLe)
-	proj := expression.NamesList(expression.Name(projCol), expression.Name(queryCol))
-	expr, err := expression.NewBuilder().WithFilter(filt).WithProjection(proj).Build()
+	keyConditionEq := expression.KeyEqual(expression.Key(keyCol), expression.Value("coding"))
+	sortCondition := expression.KeyBetween(expression.Key(sortCol), startVal, endVal)
+	overallQuery := expression.KeyAnd(keyConditionEq, sortCondition)
+
+	proj := expression.NamesList(expression.Name(projCol), expression.Name(sortCol))
+	expr, err := expression.NewBuilder().WithKeyCondition(overallQuery).WithProjection(proj).Build()
 	if err != nil {
 		log.Fatalf("Got error building expression: %s", err)
 	}
-	params := &dynamodb.ScanInput{
+
+	params := &dynamodb.QueryInput{
 		ExpressionAttributeNames:  expr.Names(),
 		ExpressionAttributeValues: expr.Values(),
-		FilterExpression:          expr.Filter(),
 		ProjectionExpression:      expr.Projection(),
+		KeyConditionExpression:    expr.KeyCondition(),
 		TableName:                 aws.String(tableName),
 	}
 
 	// Make the DynamoDB Query API call
-	result, err := svc.Scan(params)
+	result, err := svc.Query(params)
 	if err != nil {
 		log.Fatalf("Query API call failed: %s", err)
 	}

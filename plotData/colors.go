@@ -27,7 +27,7 @@ func NewColors() *LanguageColors {
 	jsonFile, err := os.Open("colors.json")
 	// if we os.Open returns an error then handle it
 	if err != nil {
-		log.Panicln(err)
+		log.Fatalln(err)
 	}
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer jsonFile.Close()

@@ -23,5 +23,5 @@ Resources:
             Method: GET
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
-          DYNAMO_TABLE: Waka
+          DYNAMO_TABLE: Waka-v2
           DYNAMO_REGION: us-east-1

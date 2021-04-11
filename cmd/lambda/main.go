@@ -9,13 +9,6 @@ import (
 	"github.com/mtanzim/guac/server/utils"
 )
 
-type MyEvent struct {
-	QueryStringParameters struct {
-		Start string `json:"start"`
-		End   string `json:"end"`
-	} `json:"queryStringParameters"`
-}
-
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	start := request.QueryStringParameters["start"]

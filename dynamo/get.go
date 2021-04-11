@@ -45,7 +45,7 @@ func GetData(start, end string) []Item {
 	svc := dynamodb.New(sess)
 	tableName := os.Getenv("DYNAMO_TABLE")
 	if region == "" {
-		log.Fatalln("Please provide region")
+		log.Fatalln("Please provide table name")
 	}
 	queryCol, projCol := "Date", "Data"
 	startVal := expression.Value(start)

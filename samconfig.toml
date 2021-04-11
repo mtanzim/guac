@@ -1,0 +1,20 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "process-waka"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-z1j48vwaacup"
+s3_prefix = "process-waka"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+
+["env.json"]
+["env.json".deploy]
+["env.json".deploy.parameters]
+stack_name = "process-waka"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-z1j48vwaacup"
+s3_prefix = "process-waka"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"

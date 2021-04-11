@@ -17,5 +17,5 @@ Resources:
       Runtime: go1.x
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
-          DYNAMO_TABLE: 
-          DYNAMO_REGION:
+          DYNAMO_TABLE: Waka
+          DYNAMO_REGION: us-east-1

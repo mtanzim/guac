@@ -40,12 +40,12 @@ func GetData(start, end string) []Item {
 		Region: aws.String(region),
 	})
 	if err != nil {
-		log.Fatalln(err)
+		log.Panicln(err)
 	}
 	svc := dynamodb.New(sess)
 	tableName := os.Getenv("DYNAMO_TABLE")
-	if tableName == "" {
-		log.Fatalln("Please provide table name")
+	if region == "" {
+		log.Fatalln("Please provide region")
 	}
 	queryCol, projCol := "Date", "Data"
 	startVal := expression.Value(start)

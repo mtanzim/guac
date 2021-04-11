@@ -11,15 +11,20 @@ import (
 )
 
 type MyEvent struct {
-	Start string `json:"start"`
-	End   string `json:"end"`
+	QueryStringParameters struct {
+		Start string `json:"start"`
+		End   string `json:"end"`
+	} `json:"queryStringParameters"`
 }
 
 func HandleRequest(ctx context.Context, evt MyEvent) (string, error) {
-	if err := utils.ValidateQueryDate(evt.Start, evt.End); err != nil {
+
+	start := evt.QueryStringParameters.Start
+	end := evt.QueryStringParameters.End
+	if err := utils.ValidateQueryDate(start, end); err != nil {
 		return fmt.Sprintf("Error: %s!", err.Error()), nil
 	}
-	rv := services.DataService(evt.Start, evt.End)
+	rv := services.DataService(start, end)
 	b, err := json.MarshalIndent(rv, "", "  ")
 	if err != nil {
 		return fmt.Sprintf("Error: %s!", err.Error()), nil

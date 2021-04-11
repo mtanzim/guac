@@ -11,9 +11,12 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
+const category = "coding"
+
 type Item struct {
-	Date string // primary key
-	Data interface{}
+	Category string // primary key
+	Date     string // sort key
+	Data     interface{}
 }
 
 func putData(item *Item, svc *dynamodb.DynamoDB, tableName string, wg *sync.WaitGroup) {
@@ -50,7 +53,7 @@ func PutData(data map[string]interface{}) {
 	var wg sync.WaitGroup
 	// create the input configuration instance
 	for k, v := range data {
-		item := Item{k, v}
+		item := Item{category, k, v}
 		wg.Add(1)
 		go putData(&item, svc, tableName, &wg)
 	}

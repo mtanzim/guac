@@ -29,8 +29,12 @@ func parseResult(result *dynamodb.ScanOutput) []Item {
 }
 
 func GetData(start, end string) []Item {
+
 	// log.Println(data)
 	region := os.Getenv("DYNAMO_REGION")
+	if region == "" {
+		log.Fatalln("Please provide region")
+	}
 
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(region),
@@ -40,6 +44,9 @@ func GetData(start, end string) []Item {
 	}
 	svc := dynamodb.New(sess)
 	tableName := os.Getenv("DYNAMO_TABLE")
+	if tableName == "" {
+		log.Fatalln("Please provide table name")
+	}
 	queryCol, projCol := "Date", "Data"
 	startVal := expression.Value(start)
 	endVal := expression.Value(end)

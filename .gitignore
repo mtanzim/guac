@@ -36,3 +36,5 @@ bar.html
 pie.html
 serve
 guac.zip
+.aws-sam/
+env.json

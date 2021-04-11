@@ -38,3 +38,4 @@ serve
 guac.zip
 .aws-sam/
 env.json
+samconfig.toml

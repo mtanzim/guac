@@ -21,7 +21,7 @@ func putData(item *Item, svc *dynamodb.DynamoDB, tableName string, wg *sync.Wait
 	av, err := dynamodbattribute.MarshalMap(item)
 	if err != nil {
 		log.Println("Got error marshalling new waka item:")
-		log.Panicln(err.Error())
+		log.Fatalln(err.Error())
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      av,
@@ -30,7 +30,7 @@ func putData(item *Item, svc *dynamodb.DynamoDB, tableName string, wg *sync.Wait
 	_, err = svc.PutItem(input)
 	if err != nil {
 		log.Println("Got error calling PutItem:")
-		log.Panicln(err.Error())
+		log.Fatalln(err.Error())
 	}
 	log.Println("Successfully added/updated date " + item.Date + " to table " + tableName)
 }
@@ -43,7 +43,7 @@ func PutData(data map[string]interface{}) {
 		Region: aws.String(region),
 	})
 	if err != nil {
-		log.Panicln(err)
+		log.Fatalln(err)
 	}
 	svc := dynamodb.New(sess)
 	tableName := os.Getenv("DYNAMO_TABLE")

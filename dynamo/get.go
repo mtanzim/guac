@@ -40,7 +40,7 @@ func GetData(start, end string) []Item {
 		Region: aws.String(region),
 	})
 	if err != nil {
-		log.Panicln(err)
+		log.Fatalln(err)
 	}
 	svc := dynamodb.New(sess)
 	tableName := os.Getenv("DYNAMO_TABLE")

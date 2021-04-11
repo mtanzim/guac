@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/mtanzim/guac/dynamo"
-	"github.com/mtanzim/guac/processData"
+	"github.com/mtanzim/guac/server/services"
 	"github.com/mtanzim/guac/server/utils"
 )
 
@@ -19,13 +19,13 @@ func HandleRequest(ctx context.Context, evt MyEvent) (string, error) {
 	if err := utils.ValidateQueryDate(evt.Start, evt.End); err != nil {
 		return fmt.Sprintf("Error: %s!", err.Error()), nil
 	}
-	data := dynamo.GetData(evt.Start, evt.End)
-	dailyStats := processData.DailyTotal(data)
-	_, _ = processData.GetDateRange(dailyStats)
+	rv := services.DataService(evt.Start, evt.End)
+	b, err := json.MarshalIndent(rv, "", "  ")
+	if err != nil {
+		return fmt.Sprintf("Error: %s!", err.Error()), nil
+	}
+	return string(b), nil
 
-	_ = processData.LanguageSummary(data)
-
-	return fmt.Sprintf("Hello %s!", data), nil
 }
 
 func main() {

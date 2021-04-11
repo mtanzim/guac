@@ -18,7 +18,7 @@ type Item struct {
 func main() {
 	start, end := os.Getenv("START"), os.Getenv("END")
 	if start == "" || end == "" {
-		log.Panicln("Please specify start and end dates in .env")
+		log.Fatalln("Please specify start and end dates in .env")
 	}
 	data := dynamo.GetData(start, end)
 	dailyStats := processData.DailyTotal(data)

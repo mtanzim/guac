@@ -63,10 +63,9 @@ func GetData(start, end string) []Item {
 	params := &dynamodb.QueryInput{
 		ExpressionAttributeNames:  expr.Names(),
 		ExpressionAttributeValues: expr.Values(),
-		// FilterExpression:          expr.Filter(),
-		ProjectionExpression:   expr.Projection(),
-		KeyConditionExpression: expr.KeyCondition(),
-		TableName:              aws.String(tableName),
+		ProjectionExpression:      expr.Projection(),
+		KeyConditionExpression:    expr.KeyCondition(),
+		TableName:                 aws.String(tableName),
 	}
 
 	// Make the DynamoDB Query API call

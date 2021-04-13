@@ -1,31 +1,34 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/mtanzim/guac/server/services"
 	"github.com/mtanzim/guac/server/utils"
 )
 
-func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+type MyEvent struct {
+	Start string `json:"start"`
+	End   string `json:"end"`
+}
 
-	start := request.QueryStringParameters["start"]
-	end := request.QueryStringParameters["end"]
+func handler(ctx context.Context, event MyEvent) (string, error) {
+
+	start := event.Start
+	end := event.End
 
 	if err := utils.ValidateQueryDate(start, end); err != nil {
-		return events.APIGatewayProxyResponse{}, err
+		return "", err
 	}
+
 	rv := services.DataService(start, end)
 	b, err := json.MarshalIndent(rv, "", "  ")
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, err
+		return "", err
 	}
-	return events.APIGatewayProxyResponse{
-		Body:       string(b),
-		StatusCode: 200,
-	}, nil
+	return string(b), nil
 
 }
 

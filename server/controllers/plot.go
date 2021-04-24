@@ -24,6 +24,10 @@ func PlotController(w http.ResponseWriter, req *http.Request) {
 		rv := services.DataService(reqStart, reqEnd)
 		bar := plotData.DailyBarChart(rv.DailyStats, rv.StartDate, rv.EndDate)
 		bar.Render(w)
+	case "projectBar":
+		rv := services.DataService(reqStart, reqEnd)
+		bar := plotData.ProjectBarChart(rv.ProjStats, rv.StartDate, rv.EndDate)
+		bar.Render(w)
 	case "languagePie":
 		rv := services.DataService(reqStart, reqEnd)
 		pie := plotData.LanguagePie(rv.LangStats, rv.StartDate, rv.EndDate)

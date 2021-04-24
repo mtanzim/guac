@@ -11,6 +11,6 @@ func Page(dailyStats []processData.DailyStat, langStats processData.LanguageStat
 	barLang := DailyBarChart(dailyStats, start, end)
 	barProjects := ProjectBarChart(projStats, start, end)
 	pie := LanguagePie(langStats, start, end)
-	page.AddCharts(pie, barLang, barProjects)
+	page.AddCharts(pie, barProjects, barLang)
 	return page
 }

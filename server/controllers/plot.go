@@ -30,7 +30,7 @@ func PlotController(w http.ResponseWriter, req *http.Request) {
 		pie.Render(w)
 	case "all":
 		rv := services.DataService(reqStart, reqEnd)
-		page := plotData.Page(rv.DailyStats, rv.LangStats, rv.StartDate, rv.EndDate)
+		page := plotData.Page(rv.DailyStats, rv.LangStats, rv.ProjStats, rv.StartDate, rv.EndDate)
 		page.Renderer.Render(w)
 	default:
 		utils.HandlerError(w, errors.New("Invalid chart type"))

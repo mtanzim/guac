@@ -13,6 +13,7 @@ import (
 type RV struct {
 	DailyStats []processData.DailyStat  `json:"dailyDuration"`
 	LangStats  processData.LanguageStat `json:"languageStats"`
+	ProjStats  processData.ProjectStat  `json:"projectStats"`
 	StartDate  string                   `json:"startDate"`
 	EndDate    string                   `json:"endDate"`
 }

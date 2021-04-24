@@ -103,7 +103,7 @@ func languagePct(durations map[string]float64) ([]LangPct, error) {
 	return percentages, nil
 }
 
-func transformDurationsMap(durations map[string]float64) []LangDur {
+func transformLangDurationsMap(durations map[string]float64) []LangDur {
 	var durationsSlc []LangDur
 	for k, v := range durations {
 		durationsSlc = append(durationsSlc, LangDur{k, v})
@@ -120,6 +120,6 @@ func LanguageSummary(input []dynamo.Item) LanguageStat {
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-	durationsSlc := transformDurationsMap(durations)
+	durationsSlc := transformLangDurationsMap(durations)
 	return LanguageStat{durationsSlc, pct}
 }

@@ -25,9 +25,13 @@ func main() {
 	actualStart, actualEnd := processData.GetDateRange(dailyStats)
 
 	langStats := processData.LanguageSummary(data)
+	projStats := processData.ProjectSummary(data)
+
 	utils.PrettyPrint(dailyStats)
 	utils.PrettyPrint(langStats.Durations)
 	utils.PrettyPrint(langStats.Percentages)
+	utils.PrettyPrint(projStats)
+
 	log.Println(actualStart, actualEnd)
 
 }

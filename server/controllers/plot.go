@@ -24,13 +24,17 @@ func PlotController(w http.ResponseWriter, req *http.Request) {
 		rv := services.DataService(reqStart, reqEnd)
 		bar := plotData.DailyBarChart(rv.DailyStats, rv.StartDate, rv.EndDate)
 		bar.Render(w)
+	case "projectBar":
+		rv := services.DataService(reqStart, reqEnd)
+		bar := plotData.ProjectBarChart(rv.ProjStats, rv.StartDate, rv.EndDate)
+		bar.Render(w)
 	case "languagePie":
 		rv := services.DataService(reqStart, reqEnd)
 		pie := plotData.LanguagePie(rv.LangStats, rv.StartDate, rv.EndDate)
 		pie.Render(w)
 	case "all":
 		rv := services.DataService(reqStart, reqEnd)
-		page := plotData.Page(rv.DailyStats, rv.LangStats, rv.StartDate, rv.EndDate)
+		page := plotData.Page(rv.DailyStats, rv.LangStats, rv.ProjStats, rv.StartDate, rv.EndDate)
 		page.Renderer.Render(w)
 	default:
 		utils.HandlerError(w, errors.New("Invalid chart type"))

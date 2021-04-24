@@ -19,7 +19,7 @@ func RootController(w http.ResponseWriter, req *http.Request) {
 	}
 
 	rv := services.DataService(start, end)
-	page := plotData.Page(rv.DailyStats, rv.LangStats, rv.StartDate, rv.EndDate)
+	page := plotData.Page(rv.DailyStats, rv.LangStats, rv.ProjStats, rv.StartDate, rv.EndDate)
 	page.Renderer.Render(w)
 
 }

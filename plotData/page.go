@@ -5,11 +5,12 @@ import (
 	"github.com/mtanzim/guac/processData"
 )
 
-func Page(dailyStats []processData.DailyStat, langStats processData.LanguageStat, start, end string) *components.Page {
+func Page(dailyStats []processData.DailyStat, langStats processData.LanguageStat, projStats processData.ProjectStat, start, end string) *components.Page {
 	page := components.NewPage()
 	page.SetLayout(components.PageFlexLayout)
-	line := DailyBarChart(dailyStats, start, end)
+	barLang := DailyBarChart(dailyStats, start, end)
+	barProjects := ProjectBarChart(projStats, start, end)
 	pie := LanguagePie(langStats, start, end)
-	page.AddCharts(pie, line)
+	page.AddCharts(pie, barProjects, barLang)
 	return page
 }

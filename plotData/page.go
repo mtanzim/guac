@@ -8,9 +8,10 @@ import (
 func Page(dailyStats []processData.DailyStat, langStats processData.LanguageStat, projStats processData.ProjectStat, start, end string) *components.Page {
 	page := components.NewPage()
 	page.SetLayout(components.PageFlexLayout)
-	barLang := DailyBarChart(dailyStats, start, end)
+	barDaily := DailyBarChart(dailyStats, start, end)
 	barProjects := ProjectBarChart(projStats, start, end)
 	pie := LanguagePie(langStats, start, end)
-	page.AddCharts(pie, barProjects, barLang)
+	barLang := LanguageBarChart(langStats, start, end)
+	page.AddCharts(pie, barLang, barProjects, barDaily)
 	return page
 }

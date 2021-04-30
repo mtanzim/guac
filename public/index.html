@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Wakatime Dashboard</title>
+  </head>
+
+  <body>
+    <h1>WakaTime Dashboard</h1>
+    <form>
+      <label for="fname">Username</label><br />
+      <input type="text" id="username" name="username" /><br />
+      <label for="pass">Password</label><br />
+      <input type="text" id="pass" name="pass" /><br /><br />
+    </form>
+    <button onclick="login()">Submit</button>
+    <p id="error"></p>
+  </body>
+</html>
+
+<script>
+  function login() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("pass").value;
+    fetch("/api/v1/login", {
+      method: "POST",
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const { token } = data;
+
+        return fetch("/api/v1/data", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      }).catch(err => {
+        document.getElementById("error").innerText = err.message
+      })
+  }
+</script>

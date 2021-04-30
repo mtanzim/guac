@@ -10,16 +10,16 @@ import (
 )
 
 var (
-	BaseURL = "/api/v1"
+	ApiURL = "/api/v1"
 )
 
 func Start() {
-
-	http.HandleFunc(BaseURL+"/health", controllers.HealthController)
-	http.HandleFunc(BaseURL+"/login", controllers.LoginController)
-	http.Handle(BaseURL+"/", auth.AuthVerify(http.HandlerFunc(controllers.RootController)))
-	http.Handle(BaseURL+"/data", auth.AuthVerify(http.HandlerFunc(controllers.DataController)))
-	http.Handle(BaseURL+"/plot", auth.AuthVerify(http.HandlerFunc(controllers.PlotController)))
+	http.HandleFunc(ApiURL+"/health", controllers.HealthController)
+	http.HandleFunc(ApiURL+"/login", controllers.LoginController)
+	http.Handle(ApiURL+"/", auth.AuthVerify(http.HandlerFunc(controllers.RootController)))
+	http.Handle(ApiURL+"/data", auth.AuthVerify(http.HandlerFunc(controllers.DataController)))
+	http.Handle(ApiURL+"/plot", auth.AuthVerify(http.HandlerFunc(controllers.PlotController)))
+	http.Handle("/", http.FileServer(http.Dir("./public")))
 
 	port := os.Getenv("REST_PORT")
 	if port == "" {

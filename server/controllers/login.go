@@ -17,6 +17,10 @@ type LoginArg struct {
 	Password string
 }
 
+type LoginRes struct {
+	Token string `json:"token"`
+}
+
 func LoginController(w http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		w.WriteHeader(http.StatusNotFound)
@@ -57,7 +61,7 @@ func LoginController(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(tokenString)
+		json.NewEncoder(w).Encode(LoginRes{tokenString})
 		return
 	}
 	w.WriteHeader(http.StatusForbidden)

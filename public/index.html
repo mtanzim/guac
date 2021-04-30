@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-
+    <script src="plotly.min.js"></script>
     <title>Wakatime Dashboard</title>
   </head>
 
@@ -13,14 +13,39 @@
       <label for="fname">Username</label><br />
       <input type="text" id="username" name="username" /><br />
       <label for="pass">Password</label><br />
-      <input type="text" id="pass" name="pass" /><br /><br />
+      <input type="password" id="pass" name="pass" /><br /><br />
     </form>
     <button onclick="login()">Submit</button>
     <p id="error"></p>
+    <div id="pie-plot"></div>
   </body>
 </html>
 
 <script>
+  function plot(percentages) {
+    const data = [
+      {
+        labels: percentages.map((d) => d.language),
+        values: percentages.map((d) => d.percentage.toFixed(1)),
+        type: "pie",
+        hole: 0.7,
+        textinfo: "label",
+        textposition: "outside",
+        automargin: true,
+        // TODO: colors
+        // marker: {
+        //   colors: percentages.map((d) => d.color),
+        // },
+      },
+    ];
+
+    const layout = {
+      height: 800,
+      width: 800,
+    };
+    Plotly.newPlot("pie-plot", data, layout);
+  }
+
   function login() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("pass").value;
@@ -44,8 +69,18 @@
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-      }).catch(err => {
-        document.getElementById("error").innerText = err.message
+        const {
+          startDate,
+          endDate,
+          dailyDuration,
+          projectStats,
+          languageStats,
+        } = data;
+        const { percentages } = languageStats;
+        plot(percentages);
       })
+      .catch((err) => {
+        document.getElementById("error").innerText = err.message;
+      });
   }
 </script>

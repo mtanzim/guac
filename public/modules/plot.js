@@ -1,3 +1,5 @@
+const WIDTH = 800;
+const HEIGHT = WIDTH;
 export function plotLangPie(divName, { percentages, startDate, endDate }) {
   const data = [
     {
@@ -17,9 +19,8 @@ export function plotLangPie(divName, { percentages, startDate, endDate }) {
 
   const layout = {
     title: `Languages Used: ${startDate} to ${endDate}`,
-    font: { size: 12 },
-    height: 600,
-    width: 600,
+    height: HEIGHT,
+    width: WIDTH,
   };
   const config = { responsive: true };
   Plotly.newPlot(divName, data, layout, config);
@@ -37,9 +38,8 @@ export function plotDailyDur(divName, { dailyDuration, startDate, endDate }) {
     title: `Daily coding activity: ${startDate} to ${endDate}`,
     xaxis: { title: "Date" },
     yaxis: { title: "Hours spent" },
-    font: { size: 12 },
-    height: 600,
-    width: 600,
+    height: HEIGHT,
+    width: WIDTH,
   };
   const config = { responsive: true };
   Plotly.newPlot(divName, data, layout, config);
@@ -58,8 +58,28 @@ export function plotLangDur(divName, { langDur, startDate, endDate }) {
     xaxis: { title: "Language" },
     yaxis: { title: "Hours spent" },
     font: { size: 12 },
-    height: 600,
-    width: 600,
+    height: HEIGHT,
+    width: WIDTH,
+  };
+  const config = { responsive: true };
+  Plotly.newPlot(divName, data, layout, config);
+}
+
+export function plotProjDur(divName, { projDur, startDate, endDate }) {
+  var data = [
+    {
+      x: projDur.map((d) => d.project),
+      y: projDur.map((d) => (d.minutes / 60).toFixed(0)),
+      type: "bar",
+    },
+  ];
+  const layout = {
+    title: `Time spent on projects: ${startDate} to ${endDate}`,
+    xaxis: { title: "Project" },
+    yaxis: { title: "Hours spent" },
+    font: { size: 12 },
+    height: HEIGHT,
+    width: WIDTH,
   };
   const config = { responsive: true };
   Plotly.newPlot(divName, data, layout, config);

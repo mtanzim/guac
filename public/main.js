@@ -1,7 +1,12 @@
-import { plotLangPie, plotDailyDur, plotLangDur } from "./modules/plot.js";
+import {
+  plotLangPie,
+  plotDailyDur,
+  plotLangDur,
+  plotProjDur,
+} from "./modules/plot.js";
 
 const TOKEN_KEY = "WakaToken";
-
+// TODO: logout
 function login() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("pass").value;
@@ -33,20 +38,26 @@ function plotData(data) {
     languageStats,
   } = data;
   const { percentages, durations: langDur } = languageStats;
+  const { durations: projDur } = projectStats;
   plotLangPie("lang-pie", { percentages, startDate, endDate });
   plotLangDur("lang-dur", { langDur, startDate, endDate });
   plotDailyDur("daily-dur", { dailyDuration, startDate, endDate });
-
+  plotProjDur("proj-dur", { projDur, startDate, endDate });
 }
 
 function fetchData(token) {
-  const loginForm = document.getElementById("login-form");
-  loginForm.remove();
   return fetch("/api/v1/data", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }).then((res) => res.json());
+  }).then((res) => {
+    if (res.status === 200) {
+      const loginForm = document.getElementById("login-form");
+      loginForm.remove();
+      return res.json();
+    }
+    throw new Error("Failed to get data");
+  });
 }
 
 function initWaka() {

@@ -9,27 +9,33 @@
   </head>
 
   <body onload="initWaka();">
-    <h1>WakaTime Dashboard</h1>
-    <div id="login-form">
-      <form>
-        <label for="fname">Username</label><br />
-        <input type="text" id="username" name="username" /><br />
-        <label for="pass">Password</label><br />
-        <input type="password" id="pass" name="pass" /><br /><br />
-      </form>
-      <button id="login-btn">Submit</button>
-    </div>
-    <p id="error"></p>
-    <div class="plots">
-      <div id="lang-pie"></div>
-      <div id="lang-dur"></div>
-      <div id="daily-dur"></div>
-      <div id="proj-dur"></div>
+    <div class="content">
+      <h1>WakaTime Dashboard</h1>
+      <div id="login-form">
+        <form>
+          <label>Username</label><br />
+          <input type="text" id="username" name="username" /><br />
+          <label>Password</label><br />
+          <input type="password" id="pass" name="pass" /><br /><br />
+        </form>
+        <button id="login-btn">Submit</button>
+      </div>
+      <p id="error"></p>
+      <div class="plots">
+        <div id="daily-dur"></div>
+        <div id="lang-pie"></div>
+        <div id="lang-dur"></div>
+        <div id="proj-dur"></div>
+      </div>
     </div>
   </body>
 </html>
 
 <style>
+  .content {
+    margin: auto;
+    text-align: center;
+  }
   .plots {
     display: grid;
     grid-template-columns: 1fr 1fr;

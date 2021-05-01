@@ -1,4 +1,4 @@
-import { plotLangPie } from "./modules/plot.js";
+import { plotLangPie, plotDailyDur, plotLangDur } from "./modules/plot.js";
 
 const TOKEN_KEY = "WakaToken";
 
@@ -32,8 +32,11 @@ function plotData(data) {
     projectStats,
     languageStats,
   } = data;
-  const { percentages } = languageStats;
-  plotLangPie(percentages, "lang-pie");
+  const { percentages, durations: langDur } = languageStats;
+  plotLangPie("lang-pie", { percentages, startDate, endDate });
+  plotLangDur("lang-dur", { langDur, startDate, endDate });
+  plotDailyDur("daily-dur", { dailyDuration, startDate, endDate });
+
 }
 
 function fetchData(token) {
@@ -49,7 +52,11 @@ function fetchData(token) {
 function initWaka() {
   const curToken = window.localStorage.getItem(TOKEN_KEY);
   if (curToken) {
-    return fetchData(curToken).then(plotData);
+    return fetchData(curToken)
+      .then(plotData)
+      .catch((err) => {
+        document.getElementById("error").innerText = err.message;
+      });
   }
 
   const loginBtn = document.getElementById("login-btn");

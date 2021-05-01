@@ -4,6 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <script src="plotly.min.js"></script>
+    <script type="module" src="main.js"></script>
     <title>Wakatime Dashboard</title>
   </head>
 
@@ -20,67 +21,3 @@
     <div id="pie-plot"></div>
   </body>
 </html>
-
-<script>
-  function plot(percentages) {
-    const data = [
-      {
-        labels: percentages.map((d) => d.language),
-        values: percentages.map((d) => d.percentage.toFixed(1)),
-        type: "pie",
-        hole: 0.7,
-        textinfo: "label",
-        textposition: "outside",
-        automargin: true,
-        // TODO: colors
-        // marker: {
-        //   colors: percentages.map((d) => d.color),
-        // },
-      },
-    ];
-
-    const layout = {
-      height: 800,
-      width: 800,
-    };
-    Plotly.newPlot("pie-plot", data, layout);
-  }
-
-  function login() {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("pass").value;
-    fetch("/api/v1/login", {
-      method: "POST",
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const { token } = data;
-
-        return fetch("/api/v1/data", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        const {
-          startDate,
-          endDate,
-          dailyDuration,
-          projectStats,
-          languageStats,
-        } = data;
-        const { percentages } = languageStats;
-        plot(percentages);
-      })
-      .catch((err) => {
-        document.getElementById("error").innerText = err.message;
-      });
-  }
-</script>

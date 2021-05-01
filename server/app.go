@@ -14,12 +14,13 @@ var (
 )
 
 func Start() {
+	http.Handle("/", http.FileServer(http.Dir("./public")))
 	http.HandleFunc(ApiURL+"/health", controllers.HealthController)
 	http.HandleFunc(ApiURL+"/login", controllers.LoginController)
-	http.Handle(ApiURL+"/", auth.AuthVerify(http.HandlerFunc(controllers.RootController)))
 	http.Handle(ApiURL+"/data", auth.AuthVerify(http.HandlerFunc(controllers.DataController)))
-	http.Handle(ApiURL+"/plot", auth.AuthVerify(http.HandlerFunc(controllers.PlotController)))
-	http.Handle("/", http.FileServer(http.Dir("./public")))
+	// Backend plots are disabled
+	// http.Handle(ApiURL+"/", auth.AuthVerify(http.HandlerFunc(controllers.RootController)))
+	// http.Handle(ApiURL+"/plot", auth.AuthVerify(http.HandlerFunc(controllers.PlotController)))
 
 	port := os.Getenv("REST_PORT")
 	if port == "" {

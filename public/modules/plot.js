@@ -57,7 +57,6 @@ export function plotLangDur(divName, { langDur, startDate, endDate }) {
     title: `Time spent on languages: ${startDate} to ${endDate}`,
     xaxis: { title: "Language" },
     yaxis: { title: "Hours spent" },
-    font: { size: 12 },
     height: HEIGHT,
     width: WIDTH,
   };
@@ -77,7 +76,6 @@ export function plotProjDur(divName, { projDur, startDate, endDate }) {
     title: `Time spent on projects: ${startDate} to ${endDate}`,
     xaxis: { title: "Project" },
     yaxis: { title: "Hours spent" },
-    font: { size: 12 },
     height: HEIGHT,
     width: WIDTH,
   };

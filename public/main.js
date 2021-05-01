@@ -1,4 +1,4 @@
-import { plot } from "./modules/plot.js";
+import { plotLangPie } from "./modules/plot.js";
 
 function login() {
   const username = document.getElementById("username").value;
@@ -13,6 +13,9 @@ function login() {
     .then((res) => res.json())
     .then((data) => {
       const { token } = data;
+      if (!token) {
+        throw new Error("Unable to login");
+      }
       return token;
     });
 }
@@ -27,12 +30,14 @@ function plotData(data) {
     languageStats,
   } = data;
   const { percentages } = languageStats;
-  plot(percentages, "pie-plot");
+  plotLangPie(percentages, "lang-pie");
 }
 
-window.login = () =>
+window.initWaka = () =>
   login()
     .then((token) => {
+      const loginForm = document.getElementById("login-form");
+      loginForm.remove();
       return fetch("/api/v1/data", {
         headers: {
           Authorization: `Bearer ${token}`,

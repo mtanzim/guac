@@ -1,4 +1,4 @@
-export function plot(percentages, divName) {
+export function plotLangPie(percentages, divName) {
   const data = [
     {
       labels: percentages.map((d) => d.language),

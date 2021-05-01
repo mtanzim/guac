@@ -19,6 +19,8 @@ func PlotController(w http.ResponseWriter, req *http.Request) {
 	}
 
 	reqType := req.URL.Query().Get("type")
+	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+
 	switch reqType {
 	case "dailyBar":
 		rv := services.DataService(reqStart, reqEnd)

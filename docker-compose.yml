@@ -15,4 +15,7 @@ services:
       REST_PORT: ${REST_PORT}
       START: ${START}
       END: ${END}
+      USERNAME: ${USERNAME}
+      USERPASS: ${USERPASS}
+      SECRET: ${SECRET}
 

@@ -20,6 +20,7 @@ func RootController(w http.ResponseWriter, req *http.Request) {
 
 	rv := services.DataService(start, end)
 	page := plotData.Page(rv.DailyStats, rv.LangStats, rv.ProjStats, rv.StartDate, rv.EndDate)
+	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
 	page.Renderer.Render(w)
 
 }

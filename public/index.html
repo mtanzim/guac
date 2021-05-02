@@ -24,10 +24,10 @@
       </div>
       <p id="error"></p>
       <div id="plots" class="plots">
-        <div id="lang-pie"></div>
-        <div id="daily-dur"></div>
-        <div id="lang-dur"></div>
-        <div id="proj-dur"></div>
+        <div class="plot-item" id="lang-pie"></div>
+        <div class="plot-item" id="daily-dur"></div>
+        <div class="plot-item" id="lang-dur"></div>
+        <div class="plot-item" id="proj-dur"></div>
       </div>
     </div>
   </body>
@@ -42,6 +42,14 @@
   }
   .plots {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(800px, 1fr));
+    grid-gap: 16px;
+    /* border: 1px solid #dfdfdf; */
+    margin: 24px;
+  }
+  .plot-item {
+    border: 1px solid #dfdfdf;
+    padding: 16px;
   }
 </style>

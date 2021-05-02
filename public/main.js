@@ -105,6 +105,8 @@ function showLoginForm() {
   document.getElementById("error").innerText = "";
   const logoutBtn = document.getElementById("logout-btn");
   logoutBtn.style.visibility = "hidden";
+  const sub = document.getElementById("subtitle");
+  sub.innerHTML = "";
 }
 
 function initWaka() {

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"errors"
-	"log"
 	"net/http"
 	"os"
 
@@ -33,9 +32,6 @@ func PlotController(w http.ResponseWriter, req *http.Request) {
 
 	reqType := req.URL.Query().Get("type")
 	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
-
-	log.Println(reqStart)
-	log.Println(reqEnd)
 
 	switch reqType {
 	case "dailyBar":

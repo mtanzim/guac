@@ -1,6 +1,6 @@
 const WIDTH = 800;
 const HEIGHT = WIDTH;
-export function plotLangPie(divName, { percentages }) {
+export function plotLangPie(divName, { percentages, colors }) {
   const data = [
     {
       labels: percentages.map((d) => d.language),
@@ -11,9 +11,9 @@ export function plotLangPie(divName, { percentages }) {
       textposition: "outside",
       automargin: true,
       // TODO: colors
-      // marker: {
-      //   colors: percentages.map((d) => d.color),
-      // },
+      marker: {
+        colors: percentages.map((d) => colors[d.language]?.color),
+      },
     },
   ];
 

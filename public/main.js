@@ -5,6 +5,11 @@ import {
   plotProjDur,
 } from "./modules/plot.js";
 
+async function getColors() {
+  const res = await fetch("colors.json");
+  return res.json();
+}
+
 const TOKEN_KEY = "WakaToken";
 
 function logout() {
@@ -47,7 +52,7 @@ function daysBetween(start, end) {
   return Math.round(Math.abs((new Date(start) - new Date(end)) / oneDay));
 }
 
-function plotData(data) {
+async function plotData(data) {
   const {
     startDate,
     endDate,
@@ -68,7 +73,8 @@ function plotData(data) {
 
   const { percentages, durations: langDur } = languageStats;
   const { durations: projDur } = projectStats;
-  plotLangPie("lang-pie", { percentages });
+  const colors = await getColors();
+  plotLangPie("lang-pie", { percentages, colors });
   plotLangDur("lang-dur", { langDur });
   plotDailyDur("daily-dur", { dailyDuration });
   plotProjDur("proj-dur", { projDur });

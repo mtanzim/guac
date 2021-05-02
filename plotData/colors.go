@@ -24,7 +24,7 @@ func (c LanguageColors) GetColor(name string) string {
 func NewColors() *LanguageColors {
 
 	// Open our jsonFile
-	jsonFile, err := os.Open("colors.json")
+	jsonFile, err := os.Open("public/colors.json")
 	// if we os.Open returns an error then handle it
 	if err != nil {
 		log.Fatalln(err)

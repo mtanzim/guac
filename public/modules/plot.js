@@ -1,6 +1,6 @@
 const WIDTH = 800;
 const HEIGHT = WIDTH;
-export function plotLangPie(divName, { percentages, startDate, endDate }) {
+export function plotLangPie(divName, { percentages, colors }) {
   const data = [
     {
       labels: percentages.map((d) => d.language),
@@ -11,14 +11,14 @@ export function plotLangPie(divName, { percentages, startDate, endDate }) {
       textposition: "outside",
       automargin: true,
       // TODO: colors
-      // marker: {
-      //   colors: percentages.map((d) => d.color),
-      // },
+      marker: {
+        colors: percentages.map((d) => colors[d.language]?.color),
+      },
     },
   ];
 
   const layout = {
-    title: `Languages Used: ${startDate} to ${endDate}`,
+    title: `Languages Used`,
     height: HEIGHT,
     width: WIDTH,
   };
@@ -26,16 +26,16 @@ export function plotLangPie(divName, { percentages, startDate, endDate }) {
   Plotly.newPlot(divName, data, layout, config);
 }
 
-export function plotDailyDur(divName, { dailyDuration, startDate, endDate }) {
+export function plotDailyDur(divName, { dailyDuration }) {
   var data = [
     {
       x: dailyDuration.map((d) => d.date),
-      y: dailyDuration.map((d) => (d.minutes / 60).toFixed(0)),
+      y: dailyDuration.map((d) => (d.minutes / 60).toFixed(1)),
       type: "bar",
     },
   ];
   const layout = {
-    title: `Daily coding activity: ${startDate} to ${endDate}`,
+    title: `Daily time spent coding`,
     xaxis: { title: "Date" },
     yaxis: { title: "Hours spent" },
     height: HEIGHT,
@@ -45,16 +45,16 @@ export function plotDailyDur(divName, { dailyDuration, startDate, endDate }) {
   Plotly.newPlot(divName, data, layout, config);
 }
 
-export function plotLangDur(divName, { langDur, startDate, endDate }) {
+export function plotLangDur(divName, { langDur }) {
   var data = [
     {
       x: langDur.map((d) => d.language),
-      y: langDur.map((d) => (d.minutes / 60).toFixed(0)),
+      y: langDur.map((d) => (d.minutes / 60).toFixed(1)),
       type: "bar",
     },
   ];
   const layout = {
-    title: `Time spent on languages: ${startDate} to ${endDate}`,
+    title: `Time spent on languages`,
     xaxis: { title: "Language" },
     yaxis: { title: "Hours spent" },
     height: HEIGHT,
@@ -64,16 +64,16 @@ export function plotLangDur(divName, { langDur, startDate, endDate }) {
   Plotly.newPlot(divName, data, layout, config);
 }
 
-export function plotProjDur(divName, { projDur, startDate, endDate }) {
+export function plotProjDur(divName, { projDur }) {
   var data = [
     {
       x: projDur.map((d) => d.project),
-      y: projDur.map((d) => (d.minutes / 60).toFixed(0)),
+      y: projDur.map((d) => (d.minutes / 60).toFixed(1)),
       type: "bar",
     },
   ];
   const layout = {
-    title: `Time spent on projects: ${startDate} to ${endDate}`,
+    title: `Time spent on projects`,
     xaxis: { title: "Project" },
     yaxis: { title: "Hours spent" },
     height: HEIGHT,

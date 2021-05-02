@@ -11,7 +11,7 @@ function logout() {
   showLoginForm();
   window.localStorage.clear(TOKEN_KEY);
   const plots = document.getElementById("plots");
-  plots.style.display = "none";
+  plots.style.visibility = "hidden";
 }
 
 function login() {
@@ -30,8 +30,7 @@ function login() {
       if (!token) {
         throw new Error("Unable to login");
       }
-      const plots = document.getElementById("plots");
-      plots.style.display = "grid";
+
       window.localStorage.setItem(TOKEN_KEY, token);
       hideLoginForm();
       return token;
@@ -93,20 +92,30 @@ function hideLoginForm() {
   document.getElementById("username").value = "";
   document.getElementById("pass").value = "";
   const loginForm = document.getElementById("login-form");
-  loginForm.style.display = "none";
+  loginForm.style.visibility = "hidden";
   document.getElementById("error").innerText = "";
   const logoutBtn = document.getElementById("logout-btn");
   logoutBtn.style.visibility = "visible";
+  const plots = document.getElementById("plots");
+  plots.style.visibility = "visible";
 }
 
 function showLoginForm() {
   const loginForm = document.getElementById("login-form");
-  loginForm.style.display = "block";
+  loginForm.style.visibility = "visible";
   document.getElementById("error").innerText = "";
   const logoutBtn = document.getElementById("logout-btn");
   logoutBtn.style.visibility = "hidden";
   const sub = document.getElementById("subtitle");
   sub.innerHTML = "";
+  const loginBtn = document.getElementById("login-btn");
+  loginBtn.onclick = () =>
+    login()
+      .then((token) => fetchData(token))
+      .then(plotData)
+      .catch((err) => {
+        document.getElementById("error").innerText = err.message;
+      });
 }
 
 function initWaka() {
@@ -119,16 +128,7 @@ function initWaka() {
         document.getElementById("error").innerText = err.message;
       });
   }
-
   showLoginForm();
-  const loginBtn = document.getElementById("login-btn");
-  loginBtn.onclick = () =>
-    login()
-      .then((token) => fetchData(token))
-      .then(plotData)
-      .catch((err) => {
-        document.getElementById("error").innerText = err.message;
-      });
 }
 
 // TODO: this is a mess; never use vanillaJS again

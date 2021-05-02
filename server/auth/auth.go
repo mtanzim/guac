@@ -39,6 +39,12 @@ func AuthVerify(next http.Handler) http.Handler {
 		token, err := jwt.ParseWithClaims(parsedToken, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 			return []byte(secret), nil
 		})
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusForbidden)
+			json.NewEncoder(w).Encode("Unauthorized")
+			return
+		}
 		if claims, ok := token.Claims.(*MyCustomClaims); ok && token.Valid {
 			log.Printf("%v %v", claims.Username, claims.StandardClaims.ExpiresAt)
 			if claims.Username == expectedUser && claims.ExpiresAt > (time.Now().Unix()*1000) {

@@ -11,6 +11,8 @@
   <body onload="initWaka();">
     <div class="content">
       <h1>WakaTime Dashboard</h1>
+      <div id="subtitle"></div>
+      <button id="logout-btn" onclick="logoutWaka();">Logout</button>
       <div id="login-form">
         <form>
           <label>Username</label><br />
@@ -21,7 +23,7 @@
         <button id="login-btn">Submit</button>
       </div>
       <p id="error"></p>
-      <div class="plots">
+      <div id="plots" class="plots">
         <div id="lang-pie"></div>
         <div id="daily-dur"></div>
         <div id="lang-dur"></div>

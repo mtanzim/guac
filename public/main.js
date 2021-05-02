@@ -6,10 +6,12 @@ import {
 } from "./modules/plot.js";
 
 const TOKEN_KEY = "WakaToken";
-// TODO: logout
 
 function logout() {
+  showLoginForm();
   window.localStorage.clear(TOKEN_KEY);
+  const plots = document.getElementById("plots");
+  plots.style.display = "none";
 }
 
 function login() {
@@ -28,13 +30,25 @@ function login() {
       if (!token) {
         throw new Error("Unable to login");
       }
+      const plots = document.getElementById("plots");
+      plots.style.display = "grid";
       window.localStorage.setItem(TOKEN_KEY, token);
+      hideLoginForm();
       return token;
     });
 }
 
+function formatDate(date) {
+  var options = { year: "numeric", month: "short", day: "numeric" };
+  return new Date(date).toLocaleDateString("en-US", options);
+}
+
+function daysBetween(start, end) {
+  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+  return Math.round(Math.abs((new Date(start) - new Date(end)) / oneDay));
+}
+
 function plotData(data) {
-  console.log(data);
   const {
     startDate,
     endDate,
@@ -42,12 +56,23 @@ function plotData(data) {
     projectStats,
     languageStats,
   } = data;
+  const subtitle = document.getElementById("subtitle");
+
+  const start = formatDate(startDate);
+  const end = formatDate(endDate);
+  const diff = daysBetween(start, end);
+
+  subtitle.innerHTML = `
+  <h3>${start} to ${end}</h3>
+  <h3>${diff} days</h3>
+  `;
+
   const { percentages, durations: langDur } = languageStats;
   const { durations: projDur } = projectStats;
-  plotLangPie("lang-pie", { percentages, startDate, endDate });
-  plotLangDur("lang-dur", { langDur, startDate, endDate });
-  plotDailyDur("daily-dur", { dailyDuration, startDate, endDate });
-  plotProjDur("proj-dur", { projDur, startDate, endDate });
+  plotLangPie("lang-pie", { percentages });
+  plotLangDur("lang-dur", { langDur });
+  plotDailyDur("daily-dur", { dailyDuration });
+  plotProjDur("proj-dur", { projDur });
 }
 
 function fetchData(token) {
@@ -59,31 +84,44 @@ function fetchData(token) {
     if (res.status === 200) {
       return res.json();
     }
+    logout();
     throw new Error("Failed to get data");
   });
 }
 
 function hideLoginForm() {
+  document.getElementById("username").value = "";
+  document.getElementById("pass").value = "";
   const loginForm = document.getElementById("login-form");
   loginForm.style.display = "none";
-  return Promise.resolve();
+  document.getElementById("error").innerText = "";
+  const logoutBtn = document.getElementById("logout-btn");
+  logoutBtn.style.visibility = "visible";
+}
+
+function showLoginForm() {
+  const loginForm = document.getElementById("login-form");
+  loginForm.style.display = "block";
+  document.getElementById("error").innerText = "";
+  const logoutBtn = document.getElementById("logout-btn");
+  logoutBtn.style.visibility = "hidden";
 }
 
 function initWaka() {
   const curToken = window.localStorage.getItem(TOKEN_KEY);
   if (curToken) {
-    return hideLoginForm()
-      .then(() => fetchData(curToken))
+    hideLoginForm();
+    return fetchData(curToken)
       .then(plotData)
       .catch((err) => {
         document.getElementById("error").innerText = err.message;
       });
   }
 
+  showLoginForm();
   const loginBtn = document.getElementById("login-btn");
   loginBtn.onclick = () =>
     login()
-      .then(hideLoginForm)
       .then((token) => fetchData(token))
       .then(plotData)
       .catch((err) => {
@@ -91,4 +129,7 @@ function initWaka() {
       });
 }
 
+// TODO: this is a mess; never use vanillaJS again
+// TODO: allow selecting start and end days
 window.initWaka = initWaka;
+window.logoutWaka = logout;

@@ -7,6 +7,11 @@ import {
 
 const TOKEN_KEY = "WakaToken";
 // TODO: logout
+
+function logout() {
+  window.localStorage.clear(TOKEN_KEY);
+}
+
 function login() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("pass").value;
@@ -52,18 +57,23 @@ function fetchData(token) {
     },
   }).then((res) => {
     if (res.status === 200) {
-      const loginForm = document.getElementById("login-form");
-      loginForm.remove();
       return res.json();
     }
     throw new Error("Failed to get data");
   });
 }
 
+function hideLoginForm() {
+  const loginForm = document.getElementById("login-form");
+  loginForm.style.display = "none";
+  return Promise.resolve();
+}
+
 function initWaka() {
   const curToken = window.localStorage.getItem(TOKEN_KEY);
   if (curToken) {
-    return fetchData(curToken)
+    return hideLoginForm()
+      .then(() => fetchData(curToken))
       .then(plotData)
       .catch((err) => {
         document.getElementById("error").innerText = err.message;
@@ -73,6 +83,7 @@ function initWaka() {
   const loginBtn = document.getElementById("login-btn");
   loginBtn.onclick = () =>
     login()
+      .then(hideLoginForm)
       .then((token) => fetchData(token))
       .then(plotData)
       .catch((err) => {

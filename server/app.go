@@ -20,7 +20,7 @@ func Start() {
 	http.Handle(ApiURL+"/data", auth.AuthVerify(http.HandlerFunc(controllers.DataController)))
 	// Backend plots are disabled
 	// http.Handle(ApiURL+"/", auth.AuthVerify(http.HandlerFunc(controllers.RootController)))
-	// http.Handle(ApiURL+"/plot", auth.AuthVerify(http.HandlerFunc(controllers.PlotController)))
+	// http.Handle(ApiURL+"/plot", http.HandlerFunc(controllers.PlotController))
 
 	port := os.Getenv("REST_PORT")
 	if port == "" {

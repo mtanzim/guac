@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"errors"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/mtanzim/guac/plotData"
 	"github.com/mtanzim/guac/server/services"
@@ -13,13 +15,27 @@ func PlotController(w http.ResponseWriter, req *http.Request) {
 
 	reqStart := req.URL.Query().Get("start")
 	reqEnd := req.URL.Query().Get("end")
-	if err := utils.ValidateQueryDate(reqStart, reqEnd); err != nil {
-		utils.HandlerError(w, err)
-		return
+
+	if reqStart == "" || reqEnd == "" {
+		reqStart, reqEnd = os.Getenv("START"), os.Getenv("END")
+
+		if reqStart == "" || reqEnd == "" {
+			utils.HandlerError(w, errors.New("Please configure default start and end dates"))
+			return
+		}
+
+	} else {
+		if err := utils.ValidateQueryDate(reqStart, reqEnd); err != nil {
+			utils.HandlerError(w, err)
+			return
+		}
 	}
 
 	reqType := req.URL.Query().Get("type")
 	w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+
+	log.Println(reqStart)
+	log.Println(reqEnd)
 
 	switch reqType {
 	case "dailyBar":
@@ -34,12 +50,10 @@ func PlotController(w http.ResponseWriter, req *http.Request) {
 		rv := services.DataService(reqStart, reqEnd)
 		pie := plotData.LanguagePie(rv.LangStats, rv.StartDate, rv.EndDate)
 		pie.Render(w)
-	case "all":
+	default:
 		rv := services.DataService(reqStart, reqEnd)
 		page := plotData.Page(rv.DailyStats, rv.LangStats, rv.ProjStats, rv.StartDate, rv.EndDate)
 		page.Renderer.Render(w)
-	default:
-		utils.HandlerError(w, errors.New("Invalid chart type"))
 	}
 
 }

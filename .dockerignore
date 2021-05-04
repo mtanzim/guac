@@ -1,1 +1,8 @@
-.env
+.env*
+template.yml
+samconfig.toml
+event.json
+.aws-sam
+.elasticbeanstalk
+.github
+.vscode

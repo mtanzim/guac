@@ -1,0 +1,1 @@
+sam local invoke WakaDynamoFetch -e event.json -n .env.json

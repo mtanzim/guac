@@ -30,7 +30,7 @@
 
 .wakatime-project
 guac
-.env
+.env*
 persist
 bar.html
 pie.html

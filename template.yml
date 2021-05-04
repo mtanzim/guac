@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  Get waka data from dynamoDB
+  Lambda fn: Get waka data from dynamoDB
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -17,5 +17,7 @@ Resources:
       Runtime: go1.x
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
-          DYNAMO_TABLE: Waka-v2
-          DYNAMO_REGION: us-east-1
+          DYNAMO_TABLE: ${DYNAMO_TABLE}
+          DYNAMO_REGION: ${DYNAMO_REGION}
+          AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+          AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}

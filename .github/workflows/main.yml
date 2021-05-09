@@ -3,7 +3,7 @@ name: Persist WakaTime
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 7 * * MON"
+    - cron: "0 1 * * MON"
 
 jobs:
   build:
@@ -28,5 +28,3 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DYNAMO_TABLE: ${{ secrets.DYNAMO_TABLE }}
           DYNAMO_REGION: ${{ secrets.DYNAMO_REGION }}
-
-

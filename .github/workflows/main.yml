@@ -19,12 +19,18 @@ jobs:
       - name: Build
         run: go build -o persist cmd/persister/main.go
 
+      - name: decrypt secret
+        run: ./decrypt_secret.sh
+        env:
+          FIRESTORE_CRED: ${{ secrets.FIRESTORE_CRED }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          
+
       - name: Run
         run: ./persist
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          DYNAMO_TABLE: ${{ secrets.DYNAMO_TABLE }}
-          DYNAMO_REGION: ${{ secrets.DYNAMO_REGION }}
+          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          GOOGLE_WAKA_COLL: ${{ secrets.GOOGLE_WAKA_COLL }}

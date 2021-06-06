@@ -6,3 +6,4 @@ event.json
 .elasticbeanstalk
 .github
 .vscode
+guac-firestore-cred.json

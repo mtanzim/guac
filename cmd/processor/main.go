@@ -21,7 +21,7 @@ func main() {
 		log.Fatalln("Please specify start and end dates in .env")
 	}
 	// data := dynamo.GetData(start, end)
-	data := firestore.Demo()
+	data := firestore.GetData(start, end)
 	dailyStats := processData.DailyTotal(data)
 	actualStart, actualEnd := processData.GetDateRange(dailyStats)
 

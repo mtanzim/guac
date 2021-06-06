@@ -16,36 +16,32 @@ type Item struct {
 	Data   interface{}
 }
 
-func Demo() {
+func CreateClient(ctx context.Context) (*firestore.Client, func() error) {
 	// Sets your Google Cloud Platform project ID.
 	projectID := os.Getenv("GOOGLE_PROJECT_ID")
-	ctx := context.Background()
+	if projectID == "" {
+		log.Fatalf("Please setup google project id env var")
+	}
 
 	client, err := firestore.NewClient(ctx, projectID)
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
 	// Close client when done with
-	defer client.Close()
+	return client, client.Close
+}
 
-	_, _, err = client.Collection("users").Add(ctx, map[string]interface{}{
-		"first": "Ada",
-		"last":  "Lovelace",
-		"born":  1815,
-	})
-	if err != nil {
-		log.Fatalf("Failed adding alovelace: %v", err)
+func Put(collName string, items []Item, ctx context.Context, client *firestore.Client) {
+	for _, item := range items {
+		_, _, err := client.Collection(collName).Add(ctx, item)
+		if err != nil {
+			log.Fatalf("Failed adding item: %v", err)
+		}
 	}
-	_, _, err = client.Collection("users").Add(ctx, map[string]interface{}{
-		"first":  "Alan",
-		"middle": "Mathison",
-		"last":   "Turing",
-		"born":   1912,
-	})
-	if err != nil {
-		log.Fatalf("Failed adding aturing: %v", err)
-	}
-	iter := client.Collection("users").Documents(ctx)
+}
+
+func Get(collName string, ctx context.Context, client *firestore.Client) {
+	iter := client.Collection(collName).Documents(ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -56,5 +52,37 @@ func Demo() {
 		}
 		fmt.Println(doc.Data())
 	}
+}
+
+func Demo() {
+	// Sets your Google Cloud Platform project ID.
+	ctx := context.Background()
+	client, close := CreateClient(ctx)
+	defer close()
+
+	items := []Item{
+		{
+			UserID: "test",
+			Date:   "test",
+			Data: map[string]interface{}{
+				"hallo": "brot",
+			},
+		},
+		{
+			UserID: "test2",
+			Date:   "test2",
+			Data: map[string]interface{}{
+				"hallo": "durum",
+			},
+		},
+	}
+
+	collName := os.Getenv("GOOGLE_WAKA_COLL")
+	if collName == "" {
+		log.Fatalf("Please setup firestore collection name env var")
+	}
+
+	Put(collName, items, ctx, client)
+	Get(collName, ctx, client)
 
 }

@@ -43,3 +43,4 @@ samconfig.toml
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+guac-forestore-cred.json

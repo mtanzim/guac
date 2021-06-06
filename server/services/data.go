@@ -1,13 +1,13 @@
 package services
 
 import (
-	"github.com/mtanzim/guac/firestore"
+	"github.com/mtanzim/guac/firestoreClient"
 	"github.com/mtanzim/guac/processData"
 	"github.com/mtanzim/guac/server/utils"
 )
 
 func DataService(start, end string) *utils.RV {
-	data := firestore.GetData(start, end)
+	data := firestoreClient.GetData(start, end)
 	dailyStats := processData.DailyTotal(data)
 	actualStart, actualEnd := processData.GetDateRange(dailyStats)
 	langStats := processData.LanguageSummary(data)

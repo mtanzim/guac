@@ -4,7 +4,7 @@ import (
 	"log"
 	"sort"
 
-	"github.com/mtanzim/guac/firestore"
+	"github.com/mtanzim/guac/firestoreClient"
 )
 
 type LanguageStat struct {
@@ -26,7 +26,7 @@ type LangPct struct {
 const MAX_LANG_COUNT = 5
 
 // TODO: this shit ugly, is it idiomatic?
-func languageDuration(input []firestore.Item) map[string]float64 {
+func languageDuration(input []firestoreClient.Item) map[string]float64 {
 	languageSummary := make(map[string]float64)
 	for _, v := range input {
 		switch vv := v.Data.(type) {
@@ -114,7 +114,7 @@ func transformLangDurationsMap(durations map[string]float64) []LangDur {
 	return durationsSlc
 }
 
-func LanguageSummary(input []firestore.Item) LanguageStat {
+func LanguageSummary(input []firestoreClient.Item) LanguageStat {
 	durations := languageDuration(input)
 	pct, err := languagePct(durations)
 	if err != nil {

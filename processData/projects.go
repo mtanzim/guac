@@ -3,7 +3,7 @@ package processData
 import (
 	"sort"
 
-	"github.com/mtanzim/guac/firestore"
+	"github.com/mtanzim/guac/firestoreClient"
 )
 
 type ProjectStat struct {
@@ -16,7 +16,7 @@ type ProjectDur struct {
 	Duration float64 `json:"minutes"`
 }
 
-func projectDuration(input []firestore.Item) map[string]float64 {
+func projectDuration(input []firestoreClient.Item) map[string]float64 {
 	projectSummary := make(map[string]float64)
 	for _, v := range input {
 		switch vv := v.Data.(type) {
@@ -57,7 +57,7 @@ func transformProjectDurationsMap(durations map[string]float64) []ProjectDur {
 	return durationsSlc
 }
 
-func ProjectSummary(input []firestore.Item) ProjectStat {
+func ProjectSummary(input []firestoreClient.Item) ProjectStat {
 	durations := projectDuration(input)
 	durationsSlc := transformProjectDurationsMap(durations)
 	return ProjectStat{durationsSlc}

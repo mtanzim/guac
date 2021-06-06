@@ -1,4 +1,4 @@
-package firestore
+package firestoreClient
 
 import (
 	"context"
@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"cloud.google.com/go/firestore"
-	"github.com/mtanzim/guac/dynamo"
 	"google.golang.org/api/iterator"
 )
 
@@ -89,22 +88,5 @@ func GetData(start, end string) []Item {
 
 	rv := get(collName, ctx, client, start, end)
 	return rv
-
-}
-
-func MigrateDynamo() {
-	collName := os.Getenv("GOOGLE_WAKA_COLL")
-
-	ctx := context.Background()
-	client, close := CreateClient(ctx)
-	defer close()
-
-	var items []Item
-	dynamoItems := dynamo.GetData("2020-01-01", "2023-01-01")
-	for _, v := range dynamoItems {
-		item := Item{v.Date, v.Data}
-		items = append(items, item)
-	}
-	put(collName, items, ctx, client)
 
 }

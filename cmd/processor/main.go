@@ -5,7 +5,7 @@ import (
 	"os"
 
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/mtanzim/guac/firestore"
+	"github.com/mtanzim/guac/firestoreClient"
 	"github.com/mtanzim/guac/processData"
 	"github.com/mtanzim/guac/utils"
 )
@@ -20,8 +20,7 @@ func main() {
 	if start == "" || end == "" {
 		log.Fatalln("Please specify start and end dates in .env")
 	}
-	// data := dynamo.GetData(start, end)
-	data := firestore.GetData(start, end)
+	data := firestoreClient.GetData(start, end)
 	dailyStats := processData.DailyTotal(data)
 	actualStart, actualEnd := processData.GetDateRange(dailyStats)
 

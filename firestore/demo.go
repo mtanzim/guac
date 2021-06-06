@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"cloud.google.com/go/firestore"
-	"github.com/mtanzim/guac/wakaApi"
 	"google.golang.org/api/iterator"
 )
 
@@ -40,10 +39,11 @@ func Put(collName string, items []Item, ctx context.Context, client *firestore.C
 	}
 }
 
-func Get(collName string, ctx context.Context, client *firestore.Client) []Item {
+func Get(collName string, ctx context.Context, client *firestore.Client, start, end string) []Item {
 
 	var rvItems []Item
-	iter := client.Collection(collName).Documents(ctx)
+	iter := client.Collection(collName).Where("Date", ">=", start).Where("Date", "<=", end).Documents(ctx)
+
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -61,25 +61,34 @@ func Get(collName string, ctx context.Context, client *firestore.Client) []Item 
 
 }
 
-func Demo() []Item {
+func PutData(data map[string]interface{}) {
+	collName := os.Getenv("GOOGLE_WAKA_COLL")
+
 	ctx := context.Background()
 	client, close := CreateClient(ctx)
 	defer close()
 
-	data := wakaApi.TransformData()
+	// data := wakaApi.TransformData()
 	var items []Item
 	for k, v := range data {
 		item := Item{"mtanzim", k, v}
 		items = append(items, item)
 	}
+	Put(collName, items, ctx, client)
+
+}
+
+func GetData(start, end string) []Item {
+	ctx := context.Background()
+	client, close := CreateClient(ctx)
+	defer close()
 
 	collName := os.Getenv("GOOGLE_WAKA_COLL")
 	if collName == "" {
 		log.Fatalf("Please setup firestore collection name env var")
 	}
 
-	// Put(collName, items, ctx, client)
-	rv := Get(collName, ctx, client)
+	rv := Get(collName, ctx, client, start, end)
 	return rv
 
 }

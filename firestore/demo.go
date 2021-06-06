@@ -40,7 +40,9 @@ func Put(collName string, items []Item, ctx context.Context, client *firestore.C
 	}
 }
 
-func Get(collName string, ctx context.Context, client *firestore.Client) {
+func Get(collName string, ctx context.Context, client *firestore.Client) []Item {
+
+	var rvItems []Item
 	iter := client.Collection(collName).Documents(ctx)
 	for {
 		doc, err := iter.Next()
@@ -50,11 +52,16 @@ func Get(collName string, ctx context.Context, client *firestore.Client) {
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
 		}
-		log.Println(doc.Data())
+		item := Item{}
+		doc.DataTo(&item)
+		rvItems = append(rvItems, item)
 	}
+	log.Println(rvItems)
+	return rvItems
+
 }
 
-func Demo() {
+func Demo() []Item {
 	ctx := context.Background()
 	client, close := CreateClient(ctx)
 	defer close()
@@ -71,7 +78,8 @@ func Demo() {
 		log.Fatalf("Please setup firestore collection name env var")
 	}
 
-	Put(collName, items, ctx, client)
-	// Get(collName, ctx, client)
+	// Put(collName, items, ctx, client)
+	rv := Get(collName, ctx, client)
+	return rv
 
 }

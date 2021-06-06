@@ -4,7 +4,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/mtanzim/guac/dynamo"
+	"github.com/mtanzim/guac/firestore"
 )
 
 type DailyStat struct {
@@ -13,7 +13,7 @@ type DailyStat struct {
 	Duration float64 `json:"minutes"`
 }
 
-func DailyTotal(input []dynamo.Item) []DailyStat {
+func DailyTotal(input []firestore.Item) []DailyStat {
 	var dailyStat []DailyStat
 	for _, v := range input {
 		switch vv := v.Data.(type) {

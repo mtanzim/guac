@@ -2,11 +2,11 @@ package firestore
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 
 	"cloud.google.com/go/firestore"
+	"github.com/mtanzim/guac/wakaApi"
 	"google.golang.org/api/iterator"
 )
 
@@ -50,31 +50,20 @@ func Get(collName string, ctx context.Context, client *firestore.Client) {
 		if err != nil {
 			log.Fatalf("Failed to iterate: %v", err)
 		}
-		fmt.Println(doc.Data())
+		log.Println(doc.Data())
 	}
 }
 
 func Demo() {
-	// Sets your Google Cloud Platform project ID.
 	ctx := context.Background()
 	client, close := CreateClient(ctx)
 	defer close()
 
-	items := []Item{
-		{
-			UserID: "test",
-			Date:   "test",
-			Data: map[string]interface{}{
-				"hallo": "brot",
-			},
-		},
-		{
-			UserID: "test2",
-			Date:   "test2",
-			Data: map[string]interface{}{
-				"hallo": "durum",
-			},
-		},
+	data := wakaApi.TransformData()
+	var items []Item
+	for k, v := range data {
+		item := Item{"mtanzim", k, v}
+		items = append(items, item)
 	}
 
 	collName := os.Getenv("GOOGLE_WAKA_COLL")
@@ -83,6 +72,6 @@ func Demo() {
 	}
 
 	Put(collName, items, ctx, client)
-	Get(collName, ctx, client)
+	// Get(collName, ctx, client)
 
 }

@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	firestore.GetData("2020-06-01", "2021-06-03")
+	firestore.MigrateDynamo()
 }

@@ -3,7 +3,7 @@ name: Persist WakaTime
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 1 * * MON"
+    - cron: "0 1 * * *"
 
 jobs:
   build:

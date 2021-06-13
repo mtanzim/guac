@@ -55,7 +55,6 @@ func get(collName string, ctx context.Context, client *firestore.Client, start, 
 		doc.DataTo(&item)
 		rvItems = append(rvItems, item)
 	}
-	log.Println(rvItems)
 	return rvItems
 
 }

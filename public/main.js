@@ -16,7 +16,7 @@ function logout() {
   showLoginForm();
   window.localStorage.clear(TOKEN_KEY);
   const plots = document.getElementById("plots");
-  plots.style.visibility = "hidden";
+  plots.style.display = "none";
 }
 
 function login() {
@@ -43,7 +43,12 @@ function login() {
 }
 
 function formatDate(date) {
-  var options = { year: "numeric", month: "short", day: "numeric" };
+  var options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  };
   return new Date(date).toLocaleDateString("en-US", options);
 }
 
@@ -53,13 +58,8 @@ function daysBetween(start, end) {
 }
 
 async function plotData(data) {
-  const {
-    startDate,
-    endDate,
-    dailyDuration,
-    projectStats,
-    languageStats,
-  } = data;
+  const { startDate, endDate, dailyDuration, projectStats, languageStats } =
+    data;
   const subtitle = document.getElementById("subtitle");
 
   const start = formatDate(startDate);
@@ -67,8 +67,9 @@ async function plotData(data) {
   const diff = daysBetween(start, end);
 
   subtitle.innerHTML = `
-  <h3>${start} to ${end}</h3>
-  <h3>${diff} days</h3>
+  <small>${start} to ${end}</small>
+  <br/>
+  <small>${diff} days</small>
   `;
 
   const { percentages, durations: langDur } = languageStats;
@@ -98,20 +99,22 @@ function hideLoginForm() {
   document.getElementById("username").value = "";
   document.getElementById("pass").value = "";
   const loginForm = document.getElementById("login-form");
-  loginForm.style.visibility = "hidden";
+  loginForm.style.display = "none";
   document.getElementById("error").innerText = "";
   const logoutBtn = document.getElementById("logout-btn");
-  logoutBtn.style.visibility = "visible";
+  logoutBtn.style.display = "block";
   const plots = document.getElementById("plots");
-  plots.style.visibility = "visible";
+  plots.style.display = "grid";
 }
 
 function showLoginForm() {
+  const plots = document.getElementById("plots");
+  plots.style.display = "none";
   const loginForm = document.getElementById("login-form");
-  loginForm.style.visibility = "visible";
+  loginForm.style.display = "block";
   document.getElementById("error").innerText = "";
   const logoutBtn = document.getElementById("logout-btn");
-  logoutBtn.style.visibility = "hidden";
+  logoutBtn.style.display = "none";
   const sub = document.getElementById("subtitle");
   sub.innerHTML = "";
   const loginBtn = document.getElementById("login-btn");

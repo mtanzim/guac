@@ -1,5 +1,10 @@
 const WIDTH = 800;
 const HEIGHT = WIDTH;
+const font = {
+  family: "Roboto, sans-serif",
+  size: 14,
+  color: "#7f7f7f",
+};
 export function plotLangPie(divName, { percentages, colors }) {
   const data = [
     {
@@ -21,6 +26,7 @@ export function plotLangPie(divName, { percentages, colors }) {
     title: `Languages Used`,
     height: HEIGHT,
     width: WIDTH,
+    ...font,
   };
   const config = { responsive: true };
   Plotly.newPlot(divName, data, layout, config);
@@ -40,9 +46,10 @@ export function plotDailyDur(divName, { dailyDuration }) {
     yaxis: { title: "Hours spent" },
     height: HEIGHT,
     width: WIDTH,
+    ...font,
   };
   const config = { responsive: true };
-  Plotly.newPlot(divName, data, layout, config);
+  setTimeout(() => Plotly.newPlot(divName, data, layout, config), 50);
 }
 
 export function plotLangDur(divName, { langDur }) {
@@ -59,6 +66,7 @@ export function plotLangDur(divName, { langDur }) {
     yaxis: { title: "Hours spent" },
     height: HEIGHT,
     width: WIDTH,
+    ...font,
   };
   const config = { responsive: true };
   Plotly.newPlot(divName, data, layout, config);
@@ -78,6 +86,7 @@ export function plotProjDur(divName, { projDur }) {
     yaxis: { title: "Hours spent" },
     height: HEIGHT,
     width: WIDTH,
+    ...font,
   };
   const config = { responsive: true };
   Plotly.newPlot(divName, data, layout, config);

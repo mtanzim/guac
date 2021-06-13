@@ -42,7 +42,7 @@ export function plotDailyDur(divName, { dailyDuration }) {
     width: WIDTH,
   };
   const config = { responsive: true };
-  Plotly.newPlot(divName, data, layout, config);
+  setTimeout(() => Plotly.newPlot(divName, data, layout, config), 50);
 }
 
 export function plotLangDur(divName, { langDur }) {

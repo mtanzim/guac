@@ -16,7 +16,7 @@ function logout() {
   showLoginForm();
   window.localStorage.clear(TOKEN_KEY);
   const plots = document.getElementById("plots");
-  plots.style.visibility = "hidden";
+  plots.style.display = "none";
 }
 
 function login() {
@@ -67,8 +67,9 @@ async function plotData(data) {
   const diff = daysBetween(start, end);
 
   subtitle.innerHTML = `
-  <h3>${start} to ${end}</h3>
-  <h3>${diff} days</h3>
+  <code>${start} to ${end}</code>
+  <br/>
+  <code>${diff} days</code>
   `;
 
   const { percentages, durations: langDur } = languageStats;
@@ -98,20 +99,20 @@ function hideLoginForm() {
   document.getElementById("username").value = "";
   document.getElementById("pass").value = "";
   const loginForm = document.getElementById("login-form");
-  loginForm.style.visibility = "hidden";
+  loginForm.style.display = "none";
   document.getElementById("error").innerText = "";
   const logoutBtn = document.getElementById("logout-btn");
-  logoutBtn.style.visibility = "visible";
+  logoutBtn.style.display = "block";
   const plots = document.getElementById("plots");
-  plots.style.visibility = "visible";
+  plots.style.display = "grid";
 }
 
 function showLoginForm() {
   const loginForm = document.getElementById("login-form");
-  loginForm.style.visibility = "visible";
+  loginForm.style.display = "block";
   document.getElementById("error").innerText = "";
   const logoutBtn = document.getElementById("logout-btn");
-  logoutBtn.style.visibility = "hidden";
+  logoutBtn.style.display = "none";
   const sub = document.getElementById("subtitle");
   sub.innerHTML = "";
   const loginBtn = document.getElementById("login-btn");

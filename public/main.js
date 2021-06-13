@@ -43,7 +43,12 @@ function login() {
 }
 
 function formatDate(date) {
-  var options = { year: "numeric", month: "short", day: "numeric" };
+  var options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  };
   return new Date(date).toLocaleDateString("en-US", options);
 }
 
@@ -53,13 +58,8 @@ function daysBetween(start, end) {
 }
 
 async function plotData(data) {
-  const {
-    startDate,
-    endDate,
-    dailyDuration,
-    projectStats,
-    languageStats,
-  } = data;
+  const { startDate, endDate, dailyDuration, projectStats, languageStats } =
+    data;
   const subtitle = document.getElementById("subtitle");
 
   const start = formatDate(startDate);

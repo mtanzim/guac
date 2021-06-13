@@ -67,9 +67,9 @@ async function plotData(data) {
   const diff = daysBetween(start, end);
 
   subtitle.innerHTML = `
-  <code>${start} to ${end}</code>
+  <small>${start} to ${end}</small>
   <br/>
-  <code>${diff} days</code>
+  <small>${diff} days</small>
   `;
 
   const { percentages, durations: langDur } = languageStats;

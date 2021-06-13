@@ -108,6 +108,8 @@ function hideLoginForm() {
 }
 
 function showLoginForm() {
+  const plots = document.getElementById("plots");
+  plots.style.display = "none";
   const loginForm = document.getElementById("login-form");
   loginForm.style.display = "block";
   document.getElementById("error").innerText = "";

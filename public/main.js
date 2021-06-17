@@ -54,7 +54,7 @@ function formatDate(date) {
 
 function daysBetween(start, end) {
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-  return Math.round(Math.abs((new Date(start) - new Date(end)) / oneDay));
+  return Math.round(Math.abs((new Date(start) - new Date(end)) / oneDay)) + 1;
 }
 
 async function plotData(data) {
@@ -74,15 +74,17 @@ async function plotData(data) {
 
   const { percentages, durations: langDur } = languageStats;
   const { durations: projDur } = projectStats;
-  const colors = await getColors();
-  plotLangPie("lang-pie", { percentages, colors });
   plotLangDur("lang-dur", { langDur });
   plotDailyDur("daily-dur", { dailyDuration });
   plotProjDur("proj-dur", { projDur });
+  const colors = await getColors();
+  plotLangPie("lang-pie", { percentages, colors });
 }
 
-function fetchData(token) {
-  return fetch("/api/v1/data", {
+function fetchData(token, start, end) {
+  const url =
+    start && end ? `/api/v1/data?start=${start}&end=${end}` : "/api/v1/data";
+  return fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -101,10 +103,49 @@ function hideLoginForm() {
   const loginForm = document.getElementById("login-form");
   loginForm.style.display = "none";
   document.getElementById("error").innerText = "";
-  const logoutBtn = document.getElementById("logout-btn");
-  logoutBtn.style.display = "block";
+  const controlBtns = document.getElementById("control-btns");
+  controlBtns.style.display = "block";
   const plots = document.getElementById("plots");
   plots.style.display = "grid";
+}
+
+function attachTimeControl(token) {
+  const formatDateForReq = (date) => {
+    return date.toISOString().split("T")[0];
+  };
+
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() - 1);
+  const ending = formatDateForReq(endDate);
+
+  const oneWkButton = document.getElementById("one-wk");
+  const twoWkButton = document.getElementById("two-wk");
+  const oneMonthButton = document.getElementById("last-m");
+  const threeMonthButton = document.getElementById("last-3m");
+  const allTimeButton = document.getElementById("all-time");
+
+  const generateHandler = (days) => {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+    const starting = formatDateForReq(startDate);
+    console.log({ starting, ending });
+    return () => showPlots(token, starting, ending);
+  };
+
+  oneWkButton.onclick = generateHandler(7);
+  twoWkButton.onclick = generateHandler(14);
+  oneMonthButton.onclick = generateHandler(30);
+  threeMonthButton.onclick = generateHandler(30 * 3);
+  allTimeButton.onclick = generateHandler(365 * 3);
+}
+
+function showPlots(token, start, end) {
+  attachTimeControl(token);
+  return fetchData(token, start, end)
+    .then(plotData)
+    .catch((err) => {
+      document.getElementById("error").innerText = err.message;
+    });
 }
 
 function showLoginForm() {
@@ -113,29 +154,19 @@ function showLoginForm() {
   const loginForm = document.getElementById("login-form");
   loginForm.style.display = "block";
   document.getElementById("error").innerText = "";
-  const logoutBtn = document.getElementById("logout-btn");
-  logoutBtn.style.display = "none";
+  const controlBtns = document.getElementById("control-btns");
+  controlBtns.style.display = "none";
   const sub = document.getElementById("subtitle");
   sub.innerHTML = "";
   const loginBtn = document.getElementById("login-btn");
-  loginBtn.onclick = () =>
-    login()
-      .then((token) => fetchData(token))
-      .then(plotData)
-      .catch((err) => {
-        document.getElementById("error").innerText = err.message;
-      });
+  loginBtn.onclick = () => login().then((token) => showPlots(token));
 }
 
 function initWaka() {
   const curToken = window.localStorage.getItem(TOKEN_KEY);
   if (curToken) {
     hideLoginForm();
-    return fetchData(curToken)
-      .then(plotData)
-      .catch((err) => {
-        document.getElementById("error").innerText = err.message;
-      });
+    return showPlots(curToken);
   }
   showLoginForm();
 }

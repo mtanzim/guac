@@ -29,7 +29,7 @@ export function plotLangPie(divName, { percentages, colors }) {
     ...font,
   };
   const config = { responsive: true };
-  Plotly.newPlot(divName, data, layout, config);
+  setTimeout(() => Plotly.newPlot(divName, data, layout, config));
 }
 
 export function plotDailyDur(divName, { dailyDuration }) {
@@ -69,7 +69,7 @@ export function plotLangDur(divName, { langDur }) {
     ...font,
   };
   const config = { responsive: true };
-  Plotly.newPlot(divName, data, layout, config);
+  setTimeout(() => Plotly.newPlot(divName, data, layout, config));
 }
 
 export function plotProjDur(divName, { projDur }) {
@@ -89,5 +89,5 @@ export function plotProjDur(divName, { projDur }) {
     ...font,
   };
   const config = { responsive: true };
-  Plotly.newPlot(divName, data, layout, config);
+  setTimeout(() => Plotly.newPlot(divName, data, layout, config));
 }

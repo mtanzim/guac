@@ -18,9 +18,18 @@
       <div class="jumbo">
         <h1>Wakatime Dashboard</h1>
         <div class="subtitle fade-in" id="subtitle"></div>
-        <button class="button" id="logout-btn" onclick="logoutWaka();">
-          Logout
-        </button>
+        <div id="control-btns">
+          <button class="button" id="one-wk">Last week</button>
+          <button class="button" id="two-wk">Last 2 weeks</button>
+          <button class="button" id="last-m">Last Month</button>
+          <button class="button" id="last-3m">Last 3 Months</button>
+          <button class="button" id="all-time">All Time</button>
+          <br />
+          <br />
+          <button class="button" id="logout-btn" onclick="logoutWaka();">
+            Logout
+          </button>
+        </div>
         <div id="login-form">
           <form>
             <label>Username</label>

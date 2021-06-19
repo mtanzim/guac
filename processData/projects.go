@@ -17,31 +17,35 @@ type ProjectDur struct {
 }
 
 func projectDuration(input []firestoreClient.Item) map[string]float64 {
-	projectSummary := make(map[string]float64)
+	var projects []interface{}
 	for _, v := range input {
 		switch vv := v.Data.(type) {
 		case map[string]interface{}:
-
-			if vv["projects"] == nil {
-				continue
-			}
-			projects := vv["projects"].([]interface{})
-
-			for _, lang := range projects {
-				switch ll := lang.(type) {
-				case map[string]interface{}:
-					projectName := ll["name"].(string)
-					projectDurationInSec := ll["total_seconds"].(float64)
-					projectDurationInMin := projectDurationInSec / 60.0
-					if val, ok := projectSummary[projectName]; ok {
-						projectSummary[projectName] = val + projectDurationInMin
-					} else {
-						projectSummary[projectName] = projectDurationInMin
-					}
-				}
-
+			if vv["projects"] != nil {
+				dailyProjects := vv["projects"].([]interface{})
+				projects = append(projects, dailyProjects...)
+				break
 			}
 		}
+	}
+
+	projectSummary := make(map[string]float64)
+	if projects == nil {
+		return projectSummary
+	}
+	for _, lang := range projects {
+		switch ll := lang.(type) {
+		case map[string]interface{}:
+			projectName := ll["name"].(string)
+			projectDurationInSec := ll["total_seconds"].(float64)
+			projectDurationInMin := projectDurationInSec / 60.0
+			if val, ok := projectSummary[projectName]; ok {
+				projectSummary[projectName] = val + projectDurationInMin
+			} else {
+				projectSummary[projectName] = projectDurationInMin
+			}
+		}
+
 	}
 	return projectSummary
 }

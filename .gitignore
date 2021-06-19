@@ -45,3 +45,4 @@ samconfig.toml
 !.elasticbeanstalk/*.global.yml
 guac-forestore-cred.json
 .scannerwork
+cmd/server/__debug_bin

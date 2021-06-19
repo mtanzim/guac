@@ -27,31 +27,35 @@ const MAX_LANG_COUNT = 5
 
 // TODO: this shit ugly, is it idiomatic?
 func languageDuration(input []firestoreClient.Item) map[string]float64 {
-	languageSummary := make(map[string]float64)
+	var languages []interface{}
 	for _, v := range input {
 		switch vv := v.Data.(type) {
 		case map[string]interface{}:
-
-			if vv["languages"] == nil {
-				continue
-			}
-			languages := vv["languages"].([]interface{})
-
-			for _, lang := range languages {
-				switch ll := lang.(type) {
-				case map[string]interface{}:
-					languageName := ll["name"].(string)
-					languageDurationInSec := ll["total_seconds"].(float64)
-					languageDurationInMin := languageDurationInSec / 60.0
-					if val, ok := languageSummary[languageName]; ok {
-						languageSummary[languageName] = val + languageDurationInMin
-					} else {
-						languageSummary[languageName] = languageDurationInMin
-					}
-				}
-
+			if vv["languages"] != nil {
+				dailyLanguages := vv["languages"].([]interface{})
+				languages = append(languages, dailyLanguages...)
+				break
 			}
 		}
+	}
+
+	languageSummary := make(map[string]float64)
+	if languages == nil {
+		return languageSummary
+	}
+	for _, lang := range languages {
+		switch ll := lang.(type) {
+		case map[string]interface{}:
+			languageName := ll["name"].(string)
+			languageDurationInSec := ll["total_seconds"].(float64)
+			languageDurationInMin := languageDurationInSec / 60.0
+			if val, ok := languageSummary[languageName]; ok {
+				languageSummary[languageName] = val + languageDurationInMin
+			} else {
+				languageSummary[languageName] = languageDurationInMin
+			}
+		}
+
 	}
 	return languageSummary
 }

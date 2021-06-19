@@ -22,12 +22,17 @@ func projectDuration(input []firestoreClient.Item) map[string]float64 {
 		switch vv := v.Data.(type) {
 		case map[string]interface{}:
 			if vv["projects"] != nil {
-				projects = vv["projects"].([]interface{})
+				dailyProjects := vv["projects"].([]interface{})
+				projects = append(projects, dailyProjects...)
+				break
 			}
 		}
 	}
 
 	projectSummary := make(map[string]float64)
+	if projects == nil {
+		return projectSummary
+	}
 	for _, lang := range projects {
 		switch ll := lang.(type) {
 		case map[string]interface{}:

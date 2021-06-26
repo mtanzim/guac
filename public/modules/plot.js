@@ -1,5 +1,5 @@
-const WIDTH = 800;
-const HEIGHT = WIDTH;
+const WIDTH = 700;
+const HEIGHT = 700;
 const font = {
   family: "Roboto, sans-serif",
   size: 14,

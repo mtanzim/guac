@@ -19,11 +19,13 @@
         <h1>Wakatime Dashboard</h1>
         <div class="subtitle fade-in" id="subtitle"></div>
         <div id="control-btns">
-          <button class="button" id="one-wk">Last week</button>
-          <button class="button" id="two-wk">Last 2 weeks</button>
-          <button class="button" id="last-m">Last Month</button>
-          <button class="button" id="last-3m">Last 3 Months</button>
-          <button class="button" id="all-time">All Time</button>
+          <button class="button control control-active" id="one-wk">
+            Last week
+          </button>
+          <button class="button control" id="two-wk">Last 2 weeks</button>
+          <button class="button control" id="last-m">Last Month</button>
+          <button class="button control" id="last-3m">Last 3 Months</button>
+          <button class="button control" id="all-time">All Time</button>
           <br />
           <br />
           <button class="button" id="logout-btn" onclick="logoutWaka();">
@@ -53,7 +55,7 @@
 
 <style>
   input {
-    width: 200px;
+    width: 150px;
     padding: 4px 12px;
     margin: 8px 0;
     margin-left: 16px;
@@ -75,6 +77,10 @@
     border-radius: 4px;
     margin: auto;
   }
+  .control-active {
+    background-color: salmon;
+  }
+
   button:hover {
     background-color: white; /* Green */
     color: #008cba;
@@ -84,30 +90,39 @@
     margin-bottom: 8px;
     min-height: 48px;
   }
-  .jumbo {
-    padding: 32px;
-    margin-right: 1vw;
-    margin-left: 1vw;
-    margin-top: 2vh;
-    background-color: aliceblue;
-  }
 
   .content {
     margin: auto;
     text-align: center;
     font-family: "Roboto", sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 9fr;
+  }
+  .jumbo {
+    padding: 32px;
+    margin-right: 1vw;
+    margin-left: 1vw;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    background-color: aliceblue;
+    max-height: 90vh;
   }
   .plots {
     display: grid;
     align-items: center;
-    grid-template-columns: repeat(auto-fit, minmax(800px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
     grid-gap: 52px;
-    margin: 52px;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    margin-left: 24px;
+    margin-right: 24px;
+    max-height: 94vh;
+    overflow-y: auto;
   }
   .plot-item {
     border: 1px solid #dfdfdf;
     padding: 16px;
-    min-height: 800px;
+    min-height: 700px;
   }
   .fade-in {
     opacity: 1;

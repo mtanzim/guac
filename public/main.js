@@ -66,11 +66,7 @@ async function plotData(data) {
   const end = formatDate(endDate);
   const diff = daysBetween(start, end);
 
-  subtitle.innerHTML = `
-  <small>${start} to ${end}</small>
-  <br/>
-  <small>${diff} days</small>
-  `;
+  subtitle.innerText = `${start} to ${end}, ${diff} days`;
 
   const { percentages, durations: langDur } = languageStats;
   const { durations: projDur } = projectStats;
@@ -97,18 +93,6 @@ function fetchData(token, start, end) {
   });
 }
 
-function hideLoginForm() {
-  document.getElementById("username").value = "";
-  document.getElementById("pass").value = "";
-  const loginForm = document.getElementById("login-form");
-  loginForm.style.display = "none";
-  document.getElementById("error").innerText = "";
-  const controlBtns = document.getElementById("control-btns");
-  controlBtns.style.display = "block";
-  const plots = document.getElementById("plots");
-  plots.style.display = "grid";
-}
-
 function getDateRange(days) {
   const formatDateForReq = (date) => {
     return date.toISOString().split("T")[0];
@@ -130,17 +114,25 @@ function attachTimeRangeControl(token) {
   const threeMonthButton = document.getElementById("last-3m");
   const allTimeButton = document.getElementById("all-time");
 
+  const highlightBtn = (btnToHighlight) => {
+    const allCtrlBtns = document.querySelectorAll(".control");
+    allCtrlBtns.forEach((btn) => {
+      if (btnToHighlight.id === btn.id) {
+        btn.classList.add("control-active");
+      } else {
+        btn.classList.remove("control-active");
+      }
+    });
+  };
+
+  const DEFAULT_RANGE_BTN_ID = "one-wk";
+  const defaultRangeBtn = document.getElementById(DEFAULT_RANGE_BTN_ID);
+  highlightBtn(defaultRangeBtn);
+
   const generateHandler = (days, curBtn) => {
     const { starting, ending } = getDateRange(days);
     return () => {
-      const allCtrlBtns = document.querySelectorAll(".control");
-      allCtrlBtns.forEach((btn) => {
-        if (curBtn.id === btn.id) {
-          btn.classList.add("control-active");
-        } else {
-          btn.classList.remove("control-active");
-        }
-      });
+      highlightBtn(curBtn);
       showPlots(token, starting, ending);
     };
   };
@@ -164,6 +156,21 @@ const DEFAULT_DAY_RANGE = 7;
 const { starting: DEFAULT_START, ending: DEFAULT_END } =
   getDateRange(DEFAULT_DAY_RANGE);
 
+function hideLoginForm() {
+  document.getElementById("username").value = "";
+  document.getElementById("pass").value = "";
+  const loginForm = document.getElementById("login-form");
+  loginForm.style.display = "none";
+  document.getElementById("error").innerText = "";
+  const controlBtns = document.getElementById("control-btns");
+  controlBtns.style.display = "block";
+  const plots = document.getElementById("plots");
+  plots.style.display = "grid";
+
+  const content = document.querySelector(".content");
+  content.classList.remove("content-on-login");
+}
+
 function showLoginForm() {
   const plots = document.getElementById("plots");
   plots.style.display = "none";
@@ -174,9 +181,14 @@ function showLoginForm() {
   controlBtns.style.display = "none";
   const sub = document.getElementById("subtitle");
   sub.innerHTML = "";
+
+  const content = document.querySelector(".content");
+  content.classList.add("content-on-login");
+
   const loginBtn = document.getElementById("login-btn");
   loginBtn.onclick = () => {
     login().then((token) => {
+      hideLoginForm();
       showPlots(token, DEFAULT_START, DEFAULT_END);
       attachTimeRangeControl(token);
     });

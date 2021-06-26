@@ -17,11 +17,11 @@
     <div class="content">
       <div class="jumbo">
         <h1>Wakatime Dashboard</h1>
-        <div class="subtitle fade-in" id="subtitle"></div>
+        <div class="subtitle-container fade-in">
+          <small id="subtitle"></small>
+        </div>
         <div id="control-btns">
-          <button class="button control control-active" id="one-wk">
-            Last week
-          </button>
+          <button class="button control" id="one-wk">Last week</button>
           <button class="button control" id="two-wk">Last 2 weeks</button>
           <button class="button control" id="last-m">Last Month</button>
           <button class="button control" id="last-3m">Last 3 Months</button>
@@ -77,6 +77,14 @@
     border-radius: 4px;
     margin: auto;
   }
+
+  .control {
+    padding: 6px 12px;
+    font-size: 16px;
+    border-radius: 16px;
+    margin-bottom: 8px;
+  }
+
   .control-active {
     background-color: salmon;
   }
@@ -86,8 +94,9 @@
     color: #008cba;
     border: 2px solid #008cba;
   }
-  .subtitle {
-    margin-bottom: 8px;
+  .subtitle-container {
+    margin-bottom: 36px;
+    font-size: large;
     min-height: 48px;
   }
 
@@ -97,6 +106,9 @@
     font-family: "Roboto", sans-serif;
     display: grid;
     grid-template-columns: 1fr 9fr;
+  }
+  .content-on-login {
+    grid-template-columns: 1fr;
   }
   .jumbo {
     padding: 32px;

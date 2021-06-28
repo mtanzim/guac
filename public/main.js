@@ -66,11 +66,7 @@ async function plotData(data) {
   const end = formatDate(endDate);
   const diff = daysBetween(start, end);
 
-  subtitle.innerHTML = `
-  <small>${start} to ${end}</small>
-  <br/>
-  <small>${diff} days</small>
-  `;
+  subtitle.innerText = `${start} to ${end}, ${diff} days`;
 
   const { percentages, durations: langDur } = languageStats;
   const { durations: projDur } = projectStats;
@@ -97,6 +93,69 @@ function fetchData(token, start, end) {
   });
 }
 
+function getDateRange(days) {
+  const formatDateForReq = (date) => {
+    return date.toISOString().split("T")[0];
+  };
+
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() - 1);
+  const ending = formatDateForReq(endDate);
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+  const starting = formatDateForReq(startDate);
+  return { starting, ending };
+}
+
+function attachTimeRangeControl(token) {
+  const oneWkButton = document.getElementById("one-wk");
+  const twoWkButton = document.getElementById("two-wk");
+  const oneMonthButton = document.getElementById("last-m");
+  const threeMonthButton = document.getElementById("last-3m");
+  const allTimeButton = document.getElementById("all-time");
+
+  const highlightBtn = (btnToHighlight) => {
+    const allCtrlBtns = document.querySelectorAll(".control");
+    allCtrlBtns.forEach((btn) => {
+      if (btnToHighlight.id === btn.id) {
+        btn.classList.add("control-active");
+      } else {
+        btn.classList.remove("control-active");
+      }
+    });
+  };
+
+  const DEFAULT_RANGE_BTN_ID = "one-wk";
+  const defaultRangeBtn = document.getElementById(DEFAULT_RANGE_BTN_ID);
+  highlightBtn(defaultRangeBtn);
+
+  const generateHandler = (days, curBtn) => {
+    const { starting, ending } = getDateRange(days);
+    return () => {
+      highlightBtn(curBtn);
+      showPlots(token, starting, ending);
+    };
+  };
+
+  oneWkButton.onclick = generateHandler(7, oneWkButton);
+  twoWkButton.onclick = generateHandler(14, twoWkButton);
+  oneMonthButton.onclick = generateHandler(30, oneMonthButton);
+  threeMonthButton.onclick = generateHandler(30 * 3, threeMonthButton);
+  allTimeButton.onclick = generateHandler(365 * 3, allTimeButton);
+}
+
+function showPlots(token, start, end) {
+  return fetchData(token, start, end)
+    .then(plotData)
+    .catch((err) => {
+      document.getElementById("error").innerText = err.message;
+    });
+}
+
+const DEFAULT_DAY_RANGE = 7;
+const { starting: DEFAULT_START, ending: DEFAULT_END } =
+  getDateRange(DEFAULT_DAY_RANGE);
+
 function hideLoginForm() {
   document.getElementById("username").value = "";
   document.getElementById("pass").value = "";
@@ -107,45 +166,9 @@ function hideLoginForm() {
   controlBtns.style.display = "block";
   const plots = document.getElementById("plots");
   plots.style.display = "grid";
-}
 
-function attachTimeControl(token) {
-  const formatDateForReq = (date) => {
-    return date.toISOString().split("T")[0];
-  };
-
-  const endDate = new Date();
-  endDate.setDate(endDate.getDate() - 1);
-  const ending = formatDateForReq(endDate);
-
-  const oneWkButton = document.getElementById("one-wk");
-  const twoWkButton = document.getElementById("two-wk");
-  const oneMonthButton = document.getElementById("last-m");
-  const threeMonthButton = document.getElementById("last-3m");
-  const allTimeButton = document.getElementById("all-time");
-
-  const generateHandler = (days) => {
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
-    const starting = formatDateForReq(startDate);
-    console.log({ starting, ending });
-    return () => showPlots(token, starting, ending);
-  };
-
-  oneWkButton.onclick = generateHandler(7);
-  twoWkButton.onclick = generateHandler(14);
-  oneMonthButton.onclick = generateHandler(30);
-  threeMonthButton.onclick = generateHandler(30 * 3);
-  allTimeButton.onclick = generateHandler(365 * 3);
-}
-
-function showPlots(token, start, end) {
-  attachTimeControl(token);
-  return fetchData(token, start, end)
-    .then(plotData)
-    .catch((err) => {
-      document.getElementById("error").innerText = err.message;
-    });
+  const content = document.querySelector(".content");
+  content.classList.remove("content-on-login");
 }
 
 function showLoginForm() {
@@ -158,17 +181,29 @@ function showLoginForm() {
   controlBtns.style.display = "none";
   const sub = document.getElementById("subtitle");
   sub.innerHTML = "";
+
+  const content = document.querySelector(".content");
+  content.classList.add("content-on-login");
+
   const loginBtn = document.getElementById("login-btn");
-  loginBtn.onclick = () => login().then((token) => showPlots(token));
+  loginBtn.onclick = () => {
+    login().then((token) => {
+      hideLoginForm();
+      showPlots(token, DEFAULT_START, DEFAULT_END);
+      attachTimeRangeControl(token);
+    });
+  };
 }
 
 function initWaka() {
   const curToken = window.localStorage.getItem(TOKEN_KEY);
   if (curToken) {
     hideLoginForm();
-    return showPlots(curToken);
+    showPlots(curToken, DEFAULT_START, DEFAULT_END);
+    attachTimeRangeControl(curToken);
+  } else {
+    showLoginForm();
   }
-  showLoginForm();
 }
 
 // TODO: this is a mess; never use vanillaJS again

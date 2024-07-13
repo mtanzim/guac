@@ -1,27 +1,25 @@
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0);
+import { Input } from "@/components/ui/input";
 
+export function InputWithButton() {
   return (
-    <div className="card bg-base-100 w-96 shadow-xl">
-      <figure>
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-          alt="Shoes"
-        />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">{count}</h2>
-        <div className="card-actions justify-end">
-          <button
-            className="btn btn-primary"
-            onClick={() => setCount((c) => c + 1)}
-          >
-            Count Up
-          </button>
-        </div>
-      </div>
+    <div className="w-full max-w-sm items-center">
+      <Input className="mt-4" type="username" placeholder="Username" />
+      <Input className="mt-4" type="password" placeholder="Password" />
+      <Button className="mt-4 w-1/4 float-end" type="submit">
+        Login
+      </Button>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div className="mt-64 flex flex-col justify-center items-center">
+      <h2 className="text-xl">Login to Guac Dashboard</h2>
+      <InputWithButton />
     </div>
   );
 }

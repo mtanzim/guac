@@ -3,26 +3,38 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MouseEventHandler, useState } from "react";
 
-const BASE_URL = 'http://localhost:8080'
+const BASE_URL = "http://localhost:8080";
 
-
-function Login() {
+function Login({ onLogin }: { onLogin: (t: string) => void }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const [errMsg, setErrMsg] = useState<string | null>(null);
   const handleSubmit: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
-    
+    setLoading(true);
+    setErrMsg(null);
 
-    const res = await fetch(`${BASE_URL}/api/v1/login`, {
-      method: "POST",
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    })
-    const body = await res.json()
-    alert(JSON.stringify(body));
-
+    try {
+      const res = await fetch(`${BASE_URL}/api/v1/login`, {
+        method: "POST",
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
+      const body = await res.json();
+      if (res.ok) {
+        onLogin(body?.token);
+        return;
+      }
+      throw new Error("failed to login");
+    } catch (err) {
+      console.log(err);
+      setErrMsg("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="w-full max-w-sm items-center">
@@ -40,6 +52,7 @@ function Login() {
         type="password"
         placeholder="Password"
       />
+      {errMsg && <p className="text-red-500">{errMsg}</p>}
       <Button
         className="mt-4 w-1/4 float-end"
         type="submit"
@@ -52,12 +65,19 @@ function Login() {
 }
 
 function App() {
-  return (
-    <div className="mt-64 flex flex-col justify-center items-center">
-      <h2 className="text-xl">Login to Guac Dashboard</h2>
-      <Login />
-    </div>
-  );
+  const [token, setToken] = useState<string | null>(null);
+  const isAuthenticated = !!token;
+
+  if (!isAuthenticated) {
+    return (
+      <div className="mt-64 flex flex-col justify-center items-center">
+        <h2 className="text-xl">Login to Guac Dashboard</h2>
+        <Login onLogin={setToken} />
+      </div>
+    );
+  }
+
+  return <h2 className="text-xl">Welcome</h2>;
 }
 
 export default App;

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 
 const BASE_URL = "http://localhost:8080";
 
@@ -53,6 +53,7 @@ function Login({ onLogin }: { onLogin: (t: string) => void }) {
         placeholder="Password"
       />
       {errMsg && <p className="text-red-500">{errMsg}</p>}
+      {isLoading && <p className="text-slate-400 animate-pulse">Loading...</p>}
       <Button
         className="mt-4 w-1/4 float-end"
         type="submit"
@@ -64,20 +65,45 @@ function Login({ onLogin }: { onLogin: (t: string) => void }) {
   );
 }
 
+const TOKEN_KEY = "WakaToken";
+
 function App() {
   const [token, setToken] = useState<string | null>(null);
   const isAuthenticated = !!token;
+
+  useEffect(() => {
+    const curToken = window.localStorage.getItem(TOKEN_KEY);
+    if (curToken) {
+      setToken(curToken);
+    }
+  }, []);
+
+  const onLogin = (token: string) => {
+    window.localStorage.setItem(TOKEN_KEY, token);
+    setToken(token);
+  };
+  const onLogout = () => {
+    window.localStorage.removeItem(TOKEN_KEY);
+    setToken(null);
+  };
 
   if (!isAuthenticated) {
     return (
       <div className="mt-64 flex flex-col justify-center items-center">
         <h2 className="text-xl">Login to Guac Dashboard</h2>
-        <Login onLogin={setToken} />
+        <Login onLogin={onLogin} />
       </div>
     );
   }
 
-  return <h2 className="text-xl">Welcome</h2>;
+  return (
+    <div className="flex gap-8">
+      <h2 className="text-xl">Welcome</h2>
+      <Button className="float-end" onClick={onLogout}>
+        Logout
+      </Button>
+    </div>
+  );
 }
 
 export default App;

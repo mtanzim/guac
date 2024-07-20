@@ -96,7 +96,67 @@ function App() {
     );
   }
 
-  return <Banner onLogout={onLogout} />;
+  return (
+    <>
+      <Banner onLogout={onLogout} />
+      <Plot onLogout={onLogout} token={token} />
+    </>
+  );
+}
+
+const DEFAULT_DAY_RANGE = 7;
+
+function getDateRange(days: number) {
+  const formatDateForReq = (date: Date) => {
+    return date.toISOString().split("T")[0];
+  };
+
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() - 1);
+  const ending = formatDateForReq(endDate);
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+  const starting = formatDateForReq(startDate);
+  return { starting, ending };
+}
+
+function Plot({ onLogout, token }: { onLogout: () => void; token: string }) {
+  const [data, setData] = useState<null | object>(null);
+  const [loading, setLoading] = useState(false);
+  const [errMsg, setErrMsg] = useState<null | string>(null);
+  useEffect(() => {
+    const { starting, ending } = getDateRange(DEFAULT_DAY_RANGE);
+    const url =
+      starting && ending
+        ? `${BASE_URL}/api/v1/data?start=${starting}&end=${ending}`
+        : `${BASE_URL}/api/v1/data`;
+    setLoading(true);
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error("cannot fetch");
+      })
+      .then((d) => setData(d))
+      .catch((err) => {
+        console.log(err);
+        setErrMsg("Something went wrong");
+      })
+      .finally(() => setLoading(false));
+  }, [token]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (errMsg) {
+    return <p>{errMsg}</p>;
+  }
+  return <code>{JSON.stringify(data)}</code>;
 }
 
 function Banner({ onLogout }: { onLogout: () => void }) {

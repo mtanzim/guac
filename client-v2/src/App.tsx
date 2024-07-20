@@ -96,10 +96,14 @@ function App() {
     );
   }
 
+  return <Banner onLogout={onLogout} />;
+}
+
+function Banner({ onLogout }: { onLogout: () => void }) {
   return (
-    <div className="flex gap-8">
-      <h2 className="text-xl">Welcome</h2>
-      <Button className="float-end" onClick={onLogout}>
+    <div className="flex bg-slate-400 p-6 gap-8 items-center">
+      <h2 className="text-xl ">Waka Dashboard</h2>
+      <Button className="mr-4" onClick={onLogout}>
         Logout
       </Button>
     </div>

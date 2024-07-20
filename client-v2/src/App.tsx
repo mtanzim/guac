@@ -2,6 +2,9 @@ import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
 import { MouseEventHandler, useEffect, useState } from "react";
+import { Bar, BarChart } from "recharts";
+
+import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 
 const BASE_URL = "http://localhost:8080";
 
@@ -146,9 +149,10 @@ function Plot({ onLogout, token }: { onLogout: () => void; token: string }) {
       .catch((err) => {
         console.log(err);
         setErrMsg("Something went wrong");
+        onLogout();
       })
       .finally(() => setLoading(false));
-  }, [token]);
+  }, [token, onLogout]);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -157,6 +161,32 @@ function Plot({ onLogout, token }: { onLogout: () => void; token: string }) {
     return <p>{errMsg}</p>;
   }
   return <code>{JSON.stringify(data)}</code>;
+}
+
+type dailyData = {
+  date: string;
+  minutes: number;
+};
+
+function DailyChart({ data }: { data: dailyData[] }) {
+  const chartConfig = {
+    desktop: {
+      label: "Desktop",
+      color: "#2563eb",
+    },
+    mobile: {
+      label: "Mobile",
+      color: "#60a5fa",
+    },
+  } satisfies ChartConfig;
+  return (
+    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+      <BarChart accessibilityLayer data={data}>
+        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+        <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+      </BarChart>
+    </ChartContainer>
+  );
 }
 
 function Banner({ onLogout }: { onLogout: () => void }) {

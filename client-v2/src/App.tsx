@@ -2,22 +2,11 @@ import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
 import { MouseEventHandler, useEffect, useState } from "react";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { DailyChart } from "./DailyChart";
 import { StatsData } from "./data-types";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./components/ui/card";
+import { ProjectChart } from "./ProjectChart";
+import { LanguageChart } from "./LanguageChart";
 
 const BASE_URL = "http://localhost:8080";
 
@@ -186,140 +175,6 @@ function Plot({ onLogout, token }: { onLogout: () => void; token: string }) {
         <ProjectChart projectDurations={data?.projectStats?.durations} />
       )}
     </div>
-  );
-}
-
-const toCustomDateStr = (d: string): string => {
-  return new Date(d).toLocaleDateString(undefined, {
-    month: "short",
-    day: "2-digit",
-  });
-};
-
-function ProjectChart({
-  projectDurations,
-}: {
-  projectDurations: StatsData["projectStats"]["durations"];
-}) {
-  const chartConfig = {
-    hours: {
-      label: "Hours",
-    },
-  } satisfies ChartConfig;
-
-  const chartData = projectDurations.map((d) => ({
-    hours: (d.minutes / 60).toFixed(2),
-    project: d.project,
-  }));
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Projects worked on</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <YAxis dataKey={"hours"} />
-            <XAxis
-              dataKey="project"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              // tickFormatter={toCustomDateStr}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey={"hours"} radius={4} />;
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
-  );
-}
-
-function LanguageChart({
-  languageDurations,
-}: {
-  languageDurations: StatsData["languageStats"]["durations"];
-}) {
-  const chartConfig = {
-    hours: {
-      label: "Hours",
-    },
-  } satisfies ChartConfig;
-
-  const chartData = languageDurations.map((d) => ({
-    hours: (d.minutes / 60).toFixed(2),
-    language: d.language,
-  }));
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Languages Used</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <YAxis dataKey={"hours"} />
-            <XAxis
-              dataKey="language"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              // tickFormatter={toCustomDateStr}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey={"hours"} radius={4} />;
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
-  );
-}
-
-function DailyChart({
-  dailyDuration,
-}: {
-  dailyDuration: StatsData["dailyDuration"];
-}) {
-  console.log({ dailyDuration });
-  const chartConfig = {
-    hours: {
-      label: "Hours",
-    },
-  } satisfies ChartConfig;
-
-  const chartData = dailyDuration.map((d) => ({
-    hours: (d.minutes / 60).toFixed(2),
-    date: d.date,
-  }));
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Daily time spent coding</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <YAxis dataKey={"hours"} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={toCustomDateStr}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey={"hours"} radius={4} />;
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
   );
 }
 

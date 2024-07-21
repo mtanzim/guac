@@ -179,6 +179,9 @@ function Plot({ onLogout, token }: { onLogout: () => void; token: string }) {
       {data?.dailyDuration && (
         <DailyChart dailyDuration={data?.dailyDuration} />
       )}
+      {data?.languageStats && (
+        <LanguageChart languageDurations={data?.languageStats?.durations} />
+      )}
     </>
   );
 }
@@ -189,6 +192,48 @@ const toCustomDateStr = (d: string): string => {
     day: "2-digit",
   });
 };
+
+function LanguageChart({
+  languageDurations,
+}: {
+  languageDurations: StatsData["languageStats"]["durations"];
+}) {
+  const chartConfig = {
+    hours: {
+      label: "Hours",
+    },
+  } satisfies ChartConfig;
+
+  const chartData = languageDurations.map((d) => ({
+    hours: (d.minutes / 60).toFixed(2),
+    language: d.language,
+  }));
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Languages Used</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} />
+            <YAxis dataKey={"hours"} />
+            <XAxis
+              dataKey="language"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              // tickFormatter={toCustomDateStr}
+            />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <Bar dataKey={"hours"} radius={4} />;
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  );
+}
 
 function DailyChart({
   dailyDuration,
@@ -222,7 +267,7 @@ function DailyChart({
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
-            <YAxis dataKey={"hours"}/>
+            <YAxis dataKey={"hours"} />
             <XAxis
               dataKey="date"
               tickLine={false}
@@ -230,10 +275,7 @@ function DailyChart({
               axisLine={false}
               tickFormatter={toCustomDateStr}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+            <ChartTooltip content={<ChartTooltipContent />} />
             <Bar dataKey={"hours"} radius={4} />;
           </BarChart>
         </ChartContainer>

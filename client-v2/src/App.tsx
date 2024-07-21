@@ -161,27 +161,35 @@ function Plot({ onLogout, token }: { onLogout: () => void; token: string }) {
   if (errMsg) {
     return <p>{errMsg}</p>;
   }
-  return <code>{JSON.stringify(data, null, 2)}</code>;
+  return (
+    <>
+      <code>{JSON.stringify(data?.dailyDuration, null, 2)}</code>
+      {data?.dailyDuration && (
+        <>
+          <p>data here</p>
+          <DailyChart dailyDuration={data?.dailyDuration} />
+        </>
+      )}
+    </>
+  );
 }
-
-type dailyData = {
-  date: string;
-  minutes: number;
-};
 
 function DailyChart({
   dailyDuration,
 }: {
   dailyDuration: StatsData["dailyDuration"];
 }) {
-  const chartConfig = dailyDuration.map((d) => ({
-    [d.date]: { label: d.date },
-  })) satisfies ChartConfig;
+  console.log({ dailyDuration });
+  const chartConfig = {
+    minutes: {
+      label: "Minutes",
+      color: "red",
+    },
+  } satisfies ChartConfig;
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart accessibilityLayer data={dailyDuration}>
-        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-        <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+        <Bar  dataKey={"minutes"} radius={4} />;
       </BarChart>
     </ChartContainer>
   );

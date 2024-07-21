@@ -2,10 +2,22 @@ import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
 import { MouseEventHandler, useEffect, useState } from "react";
-import { Bar, BarChart } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 import { StatsData } from "./data-types";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./components/ui/card";
 
 const BASE_URL = "http://localhost:8080";
 
@@ -163,16 +175,20 @@ function Plot({ onLogout, token }: { onLogout: () => void; token: string }) {
   }
   return (
     <>
-      <code>{JSON.stringify(data?.dailyDuration, null, 2)}</code>
+      {/* <code>{JSON.stringify(data?.dailyDuration, null, 2)}</code> */}
       {data?.dailyDuration && (
-        <>
-          <p>data here</p>
-          <DailyChart dailyDuration={data?.dailyDuration} />
-        </>
+        <DailyChart dailyDuration={data?.dailyDuration} />
       )}
     </>
   );
 }
+
+const toCustomDateStr = (d: string): string => {
+  return new Date(d).toLocaleDateString(undefined, {
+    month: "short",
+    day: "2-digit",
+  });
+};
 
 function DailyChart({
   dailyDuration,
@@ -181,17 +197,48 @@ function DailyChart({
 }) {
   console.log({ dailyDuration });
   const chartConfig = {
-    minutes: {
-      label: "Minutes",
-      color: "red",
+    hours: {
+      label: "Hours",
     },
   } satisfies ChartConfig;
+
+  const chartData = dailyDuration.map((d) => ({
+    hours: (d.minutes / 60).toFixed(2),
+    date: d.date,
+  }));
+
+  const start = toCustomDateStr(dailyDuration.at(0)?.date || "");
+  const end = toCustomDateStr(dailyDuration.at(-1)?.date || "");
+
   return (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-      <BarChart accessibilityLayer data={dailyDuration}>
-        <Bar  dataKey={"minutes"} radius={4} />;
-      </BarChart>
-    </ChartContainer>
+    <Card>
+      <CardHeader>
+        <CardTitle>Daily time spent coding</CardTitle>
+        <CardDescription>
+          {start} - {end}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} />
+            <YAxis dataKey={"hours"}/>
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={toCustomDateStr}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Bar dataKey={"hours"} radius={4} />;
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
   );
 }
 

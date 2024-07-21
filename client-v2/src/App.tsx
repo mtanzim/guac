@@ -174,7 +174,7 @@ function Plot({ onLogout, token }: { onLogout: () => void; token: string }) {
     return <p>{errMsg}</p>;
   }
   return (
-    <>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
       {/* <code>{JSON.stringify(data?.dailyDuration, null, 2)}</code> */}
       {data?.dailyDuration && (
         <DailyChart dailyDuration={data?.dailyDuration} />
@@ -182,7 +182,10 @@ function Plot({ onLogout, token }: { onLogout: () => void; token: string }) {
       {data?.languageStats && (
         <LanguageChart languageDurations={data?.languageStats?.durations} />
       )}
-    </>
+      {data?.projectStats && (
+        <ProjectChart projectDurations={data?.projectStats?.durations} />
+      )}
+    </div>
   );
 }
 
@@ -192,6 +195,48 @@ const toCustomDateStr = (d: string): string => {
     day: "2-digit",
   });
 };
+
+function ProjectChart({
+  projectDurations,
+}: {
+  projectDurations: StatsData["projectStats"]["durations"];
+}) {
+  const chartConfig = {
+    hours: {
+      label: "Hours",
+    },
+  } satisfies ChartConfig;
+
+  const chartData = projectDurations.map((d) => ({
+    hours: (d.minutes / 60).toFixed(2),
+    project: d.project,
+  }));
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Projects worked on</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} />
+            <YAxis dataKey={"hours"} />
+            <XAxis
+              dataKey="project"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              // tickFormatter={toCustomDateStr}
+            />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <Bar dataKey={"hours"} radius={4} />;
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  );
+}
 
 function LanguageChart({
   languageDurations,
@@ -252,16 +297,10 @@ function DailyChart({
     date: d.date,
   }));
 
-  const start = toCustomDateStr(dailyDuration.at(0)?.date || "");
-  const end = toCustomDateStr(dailyDuration.at(-1)?.date || "");
-
   return (
     <Card>
       <CardHeader>
         <CardTitle>Daily time spent coding</CardTitle>
-        <CardDescription>
-          {start} - {end}
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">

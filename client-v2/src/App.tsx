@@ -5,6 +5,7 @@ import { MouseEventHandler, useEffect, useState } from "react";
 import { Bar, BarChart } from "recharts";
 
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { StatsData } from "./data-types";
 
 const BASE_URL = "http://localhost:8080";
 
@@ -124,7 +125,7 @@ function getDateRange(days: number) {
 }
 
 function Plot({ onLogout, token }: { onLogout: () => void; token: string }) {
-  const [data, setData] = useState<null | object>(null);
+  const [data, setData] = useState<null | StatsData>(null);
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState<null | string>(null);
   useEffect(() => {
@@ -160,7 +161,7 @@ function Plot({ onLogout, token }: { onLogout: () => void; token: string }) {
   if (errMsg) {
     return <p>{errMsg}</p>;
   }
-  return <code>{JSON.stringify(data)}</code>;
+  return <code>{JSON.stringify(data, null, 2)}</code>;
 }
 
 type dailyData = {
@@ -168,20 +169,17 @@ type dailyData = {
   minutes: number;
 };
 
-function DailyChart({ data }: { data: dailyData[] }) {
-  const chartConfig = {
-    desktop: {
-      label: "Desktop",
-      color: "#2563eb",
-    },
-    mobile: {
-      label: "Mobile",
-      color: "#60a5fa",
-    },
-  } satisfies ChartConfig;
+function DailyChart({
+  dailyDuration,
+}: {
+  dailyDuration: StatsData["dailyDuration"];
+}) {
+  const chartConfig = dailyDuration.map((d) => ({
+    [d.date]: { label: d.date },
+  })) satisfies ChartConfig;
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-      <BarChart accessibilityLayer data={data}>
+      <BarChart accessibilityLayer data={dailyDuration}>
         <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
         <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
       </BarChart>

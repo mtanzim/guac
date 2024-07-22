@@ -6,7 +6,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card";
 import { StatsData } from "./data-types";
 import { toCustomDateStr } from "./utils";
 
@@ -30,7 +30,8 @@ export function DailyChart({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Daily time spent coding</CardTitle>
+        <CardTitle>Time coding</CardTitle>
+        <CardDescription>Hours spent</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">

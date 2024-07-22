@@ -15,6 +15,7 @@ import {
 } from "./components/ui/card";
 import { StatsData } from "./data-types";
 import { getColor, TOP_N_LANGUAGES } from "./utils";
+import { useMemo } from "react";
 
 export function LanguageChart({
   languageDurations,
@@ -27,28 +28,30 @@ export function LanguageChart({
     },
   } satisfies ChartConfig;
 
-  const chartData = languageDurations
-    .slice()
-    .sort((a, b) => b.minutes - a.minutes)
-    .slice(0, TOP_N_LANGUAGES)
-    .map((d) => ({
-      hours: (d.minutes / 60).toFixed(2),
-      language: d.language,
-    }));
+  const [chartData, maxY] = useMemo(() => {
+    const d = languageDurations
+      .slice()
+      .sort((a, b) => b.minutes - a.minutes)
+      .slice(0, TOP_N_LANGUAGES)
+      .map((d) => ({
+        hours: (d.minutes / 60).toFixed(2),
+        language: d.language,
+      }));
 
-  const restMinutes = languageDurations
-    .slice()
-    .sort((a, b) => b.minutes - a.minutes)
-    .slice(TOP_N_LANGUAGES)
-    .reduce((acc, cur) => acc + cur.minutes, 0);
-  chartData.push({ hours: (restMinutes / 60).toFixed(2), language: "Rest" });
-
-  const maxY = Math.ceil(
-    chartData.reduce(
-      (acc, cur) => (Number(cur.hours) > acc ? Number(cur.hours) : acc),
-      0
-    )
-  );
+    const restMinutes = languageDurations
+      .slice()
+      .sort((a, b) => b.minutes - a.minutes)
+      .slice(TOP_N_LANGUAGES)
+      .reduce((acc, cur) => acc + cur.minutes, 0);
+    d.push({ hours: (restMinutes / 60).toFixed(2), language: "Rest" });
+    const m = Math.ceil(
+      d.reduce(
+        (acc, cur) => (Number(cur.hours) > acc ? Number(cur.hours) : acc),
+        0
+      )
+    );
+    return [d, m];
+  }, [languageDurations]);
 
   return (
     <Card>

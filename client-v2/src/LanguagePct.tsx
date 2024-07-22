@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { StatsData } from "./data-types";
-import { getColor } from "./utils";
+import { getColor, TOP_N_LANGUAGES } from "./utils";
 
 const chartConfig = {
   language: {
@@ -32,13 +32,18 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-
-
 export function LanguagePct({
-  percentages,
+  rawPercentages,
 }: {
-  percentages: StatsData["languageStats"]["percentages"];
+  rawPercentages: StatsData["languageStats"]["percentages"];
 }) {
+  const percentages = rawPercentages
+    .slice()
+    .sort((a, b) => b.percentage - a.percentage)
+    .slice(0, TOP_N_LANGUAGES + 1);
+  const totalPct = percentages.reduce((acc, cur) => acc + cur.percentage, 0);
+  percentages.push({ percentage: 100 - totalPct, language: "Rest" });
+
   const id = "pie-interactive";
   const [active, setActive] = React.useState(percentages[0].language);
 

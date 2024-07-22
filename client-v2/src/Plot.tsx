@@ -62,7 +62,7 @@ export function Plot({
         <ProjectChart projectDurations={data?.projectStats?.durations} />
       )}
       {data?.languageStats?.percentages && (
-        <LanguagePct percentages={data?.languageStats?.percentages} />
+        <LanguagePct rawPercentages={data?.languageStats?.percentages} />
       )}
     </div>
   );

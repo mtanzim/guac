@@ -6,9 +6,15 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./components/ui/card";
 import { StatsData } from "./data-types";
-import { getColor } from "./utils";
+import { getColor, TOP_N_LANGUAGES } from "./utils";
 
 export function LanguageChart({
   languageDurations,
@@ -21,15 +27,27 @@ export function LanguageChart({
     },
   } satisfies ChartConfig;
 
-  const chartData = languageDurations.map((d) => ({
-    hours: (d.minutes / 60).toFixed(2),
-    language: d.language,
-  }));
+  const chartData = languageDurations
+    .slice()
+    .sort((a, b) => b.minutes - a.minutes)
+    .slice(0, TOP_N_LANGUAGES)
+    .map((d) => ({
+      hours: (d.minutes / 60).toFixed(2),
+      language: d.language,
+    }));
+
+  const restMinutes = languageDurations
+    .slice()
+    .sort((a, b) => b.minutes - a.minutes)
+    .slice(TOP_N_LANGUAGES)
+    .reduce((acc, cur) => acc + cur.minutes, 0);
+  chartData.push({ hours: (restMinutes / 60).toFixed(2), language: "Rest" });
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Languages Used</CardTitle>
+        <CardDescription>Hours spent</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">

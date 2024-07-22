@@ -24,15 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { StatsData } from "./data-types";
-import * as colors from "./colors.json";
-
-const percentages = [
-  { month: "january", desktop: 186, fill: "var(--color-january)" },
-  { month: "february", desktop: 305, fill: "var(--color-february)" },
-  { month: "march", desktop: 237, fill: "var(--color-march)" },
-  { month: "april", desktop: 173, fill: "var(--color-april)" },
-  { month: "may", desktop: 209, fill: "var(--color-may)" },
-];
+import { getColor } from "./utils";
 
 const chartConfig = {
   language: {
@@ -40,9 +32,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-function getColor(lang: string): string {
-  return colors?.[lang]?.color || "gray";
-}
+
 
 export function LanguagePct({
   percentages,
@@ -103,7 +93,7 @@ export function LanguagePct({
         <ChartContainer
           id={id}
           config={chartConfig}
-          className="mx-auto aspect-square w-full max-w-[300px]"
+          className="mx-auto aspect-square w-full max-w-[800px]"
         >
           <PieChart>
             <ChartTooltip content={<ChartTooltipContent />} />
@@ -144,7 +134,7 @@ export function LanguagePct({
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="fill-foreground text-xl font-bold"
                         >
                           {active}
                         </tspan>

@@ -1,3 +1,5 @@
+import * as colors from "./colors.json";
+
 export const toCustomDateStr = (d: string): string => {
   return new Date(d).toLocaleDateString(undefined, {
     month: "short",
@@ -17,6 +19,13 @@ export function getDateRange(days: number) {
   startDate.setDate(startDate.getDate() - days);
   const starting = formatDateForReq(startDate);
   return { starting, ending };
+}
+
+export function getColor(lang: string): string {
+  return (
+    (colors as Record<string, { color: string | null }>)?.[lang]?.color ||
+    "gray"
+  );
 }
 
 export const DEFAULT_DAY_RANGE = 7;

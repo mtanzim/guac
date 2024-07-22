@@ -43,6 +43,13 @@ export function LanguageChart({
     .reduce((acc, cur) => acc + cur.minutes, 0);
   chartData.push({ hours: (restMinutes / 60).toFixed(2), language: "Rest" });
 
+  const maxY = Math.ceil(
+    chartData.reduce(
+      (acc, cur) => (Number(cur.hours) > acc ? Number(cur.hours) : acc),
+      0
+    )
+  );
+
   return (
     <Card>
       <CardHeader>
@@ -53,7 +60,7 @@ export function LanguageChart({
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
-            <YAxis dataKey={"hours"} />
+            <YAxis domain={[0, maxY + 2]} dataKey={"hours"} />
             <XAxis
               dataKey="language"
               tickLine={false}

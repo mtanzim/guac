@@ -51,16 +51,16 @@ export function Plot({
   }
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-      {/* <code>{JSON.stringify(data?.dailyDuration, null, 2)}</code> */}
       {data?.dailyDuration && (
         <DailyChart dailyDuration={data?.dailyDuration} />
-      )}
-      {data?.languageStats && (
-        <LanguageChart languageDurations={data?.languageStats?.durations} />
       )}
       {data?.projectStats && (
         <ProjectChart projectDurations={data?.projectStats?.durations} />
       )}
+      {data?.languageStats && (
+        <LanguageChart languageDurations={data?.languageStats?.durations} />
+      )}
+
       {data?.languageStats?.percentages && (
         <LanguagePct rawPercentages={data?.languageStats?.percentages} />
       )}

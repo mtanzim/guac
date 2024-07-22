@@ -4,6 +4,7 @@ import { StatsData } from "./data-types";
 import { LanguageChart } from "./LanguageChart";
 import { ProjectChart } from "./ProjectChart";
 import { BASE_URL, DEFAULT_DAY_RANGE, getDateRange } from "./utils";
+import { LanguagePct } from "./LanguagePct";
 
 export function Plot({
   onLogout,
@@ -59,6 +60,9 @@ export function Plot({
       )}
       {data?.projectStats && (
         <ProjectChart projectDurations={data?.projectStats?.durations} />
+      )}
+      {data?.languageStats?.percentages && (
+        <LanguagePct percentages={data?.languageStats?.percentages} />
       )}
     </div>
   );

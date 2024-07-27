@@ -4,10 +4,7 @@ import { StatsData } from "./data-types";
 import { LanguageChart } from "./LanguageChart";
 import { LanguagePct } from "./LanguagePct";
 import { ProjectChart } from "./ProjectChart";
-import {
-  BASE_URL,
-  formatDateForReq
-} from "./utils";
+import { BASE_URL, formatDateForReq } from "./utils";
 
 export function Plot({
   onLogout,
@@ -52,27 +49,24 @@ export function Plot({
       .finally(() => setLoading(false));
   }, [token, onLogout, start, end]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
   if (errMsg) {
     return <p>{errMsg}</p>;
   }
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-      {data?.dailyDuration && (
-        <DailyChart dailyDuration={data?.dailyDuration} />
-      )}
-      {data?.projectStats && (
-        <ProjectChart projectDurations={data?.projectStats?.durations} />
-      )}
-      {data?.languageStats && (
-        <LanguageChart languageDurations={data?.languageStats?.durations} />
-      )}
-
-      {data?.languageStats?.percentages && (
-        <LanguagePct rawPercentages={data?.languageStats?.percentages} />
-      )}
+      <DailyChart loading={loading} dailyDuration={data?.dailyDuration} />
+      <ProjectChart
+        loading={loading}
+        projectDurations={data?.projectStats?.durations}
+      />
+      <LanguageChart
+        loading={loading}
+        languageDurations={data?.languageStats?.durations}
+      />
+      <LanguagePct
+        loading={loading}
+        rawPercentages={data?.languageStats?.percentages}
+      />
     </div>
   );
 }

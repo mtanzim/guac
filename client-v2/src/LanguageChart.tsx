@@ -16,11 +16,14 @@ import {
 import { StatsData } from "./data-types";
 import { getColor, TOP_N_LANGUAGES } from "./utils";
 import { useMemo } from "react";
+import { SkeletonChart } from "./SkeletonChart";
 
 export function LanguageChart({
   languageDurations,
+  loading,
 }: {
-  languageDurations: StatsData["languageStats"]["durations"];
+  languageDurations?: StatsData["languageStats"]["durations"];
+  loading: boolean;
 }) {
   const chartConfig = {
     hours: {
@@ -29,7 +32,7 @@ export function LanguageChart({
   } satisfies ChartConfig;
 
   const [chartData, maxY] = useMemo(() => {
-    const d = languageDurations
+    const d = (languageDurations || [])
       .slice()
       .sort((a, b) => b.minutes - a.minutes)
       .slice(0, TOP_N_LANGUAGES)
@@ -38,7 +41,7 @@ export function LanguageChart({
         language: d.language,
       }));
 
-    const restMinutes = languageDurations
+    const restMinutes = (languageDurations || [])
       .slice()
       .sort((a, b) => b.minutes - a.minutes)
       .slice(TOP_N_LANGUAGES)
@@ -65,24 +68,27 @@ export function LanguageChart({
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <YAxis domain={[0, maxY + 2]} dataKey={"hours"} />
-            <XAxis
-              dataKey="language"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              // tickFormatter={toCustomDateStr}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey={"hours"} radius={4}>
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getColor(entry.language)} />
-              ))}
-            </Bar>
-            ;
-          </BarChart>
+          {loading ? (
+            <SkeletonChart />
+          ) : (
+            <BarChart accessibilityLayer data={chartData}>
+              <CartesianGrid vertical={false} />
+              <YAxis domain={[0, maxY + 2]} dataKey={"hours"} />
+              <XAxis
+                dataKey="language"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+              />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey={"hours"} radius={4}>
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={getColor(entry.language)} />
+                ))}
+              </Bar>
+              ;
+            </BarChart>
+          )}
         </ChartContainer>
       </CardContent>
     </Card>

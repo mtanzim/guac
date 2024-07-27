@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { StatsData } from "./data-types";
 import { getColor, TOP_N_LANGUAGES } from "./utils";
+import { SkeletonChart } from "./SkeletonChart";
 
 const chartConfig = {
   language: {
@@ -34,10 +35,24 @@ const chartConfig = {
 
 export function LanguagePct({
   rawPercentages,
+  loading,
 }: {
-  rawPercentages: StatsData["languageStats"]["percentages"];
+  rawPercentages?: StatsData["languageStats"]["percentages"];
+  loading: boolean;
 }) {
-  const percentages = rawPercentages
+  const [active, setActive] = React.useState<string | undefined>(undefined);
+  React.useEffect(() => {
+    setActive(rawPercentages?.[0]?.language);
+  }, [rawPercentages]);
+  if (loading) {
+    return <SkeletonChart />;
+  }
+
+  if (!rawPercentages) {
+    return null;
+  }
+
+  const percentages = (rawPercentages || [])
     .slice()
     .sort((a, b) => b.percentage - a.percentage)
     .slice(0, TOP_N_LANGUAGES);
@@ -45,16 +60,9 @@ export function LanguagePct({
   percentages.push({ percentage: 100 - totalPct, language: "Rest" });
 
   const id = "pie-interactive";
-  const [active, setActive] = React.useState(percentages[0].language);
 
-  const activeIndex = React.useMemo(
-    () => percentages.findIndex((item) => item.language === active),
-    [active, percentages]
-  );
-  const langs = React.useMemo(
-    () => percentages.map((item) => item.language),
-    [percentages]
-  );
+  const activeIndex = percentages.findIndex((item) => item.language === active);
+  const langs = percentages.map((item) => item.language);
 
   return (
     <Card data-chart={id} className="flex flex-col">

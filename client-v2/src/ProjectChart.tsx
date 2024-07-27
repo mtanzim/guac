@@ -16,11 +16,14 @@ import {
 import { StatsData } from "./data-types";
 import { TOP_N_PROJECTS } from "./utils";
 import { useMemo } from "react";
+import { SkeletonChart } from "./SkeletonChart";
 
 export function ProjectChart({
   projectDurations,
+  loading,
 }: {
-  projectDurations: StatsData["projectStats"]["durations"];
+  projectDurations?: StatsData["projectStats"]["durations"];
+  loading: boolean;
 }) {
   const chartConfig = {
     hours: {
@@ -29,7 +32,7 @@ export function ProjectChart({
   } satisfies ChartConfig;
 
   const [chartData, maxY] = useMemo(() => {
-    const d = projectDurations
+    const d = (projectDurations || [])
       .slice()
       .sort((a, b) => b.minutes - a.minutes)
       .slice(0, TOP_N_PROJECTS)
@@ -38,7 +41,7 @@ export function ProjectChart({
         project: d.project,
       }));
 
-    const restMinutes = projectDurations
+    const restMinutes = (projectDurations || [])
       .slice()
       .sort((a, b) => b.minutes - a.minutes)
       .slice(TOP_N_PROJECTS)
@@ -62,18 +65,22 @@ export function ProjectChart({
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <YAxis domain={[0, maxY + 2]} dataKey={"hours"} />
-            <XAxis
-              dataKey="project"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey={"hours"} radius={4} />;
-          </BarChart>
+          {loading ? (
+            <SkeletonChart />
+          ) : (
+            <BarChart accessibilityLayer data={chartData}>
+              <CartesianGrid vertical={false} />
+              <YAxis domain={[0, maxY + 2]} dataKey={"hours"} />
+              <XAxis
+                dataKey="project"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+              />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey={"hours"} radius={4} />;
+            </BarChart>
+          )}
         </ChartContainer>
       </CardContent>
     </Card>

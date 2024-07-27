@@ -52,6 +52,7 @@ export function Plot({
   if (errMsg) {
     return <p>{errMsg}</p>;
   }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
       <DailyChart loading={loading} dailyDuration={data?.dailyDuration} />

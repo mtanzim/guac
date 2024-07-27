@@ -1,13 +1,30 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./components/ui/card";
 
 export function SkeletonChart() {
   return (
-    <div className="h-fit w-fit flex flex-col space-y-3 m-4">
-      <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-[250px]" />
-        <Skeleton className="h-4 w-[200px]" />
-      </div>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          <Skeleton className="h-4 w-[300px]" />
+        </CardTitle>
+        <CardDescription>
+          <Skeleton className="h-4 w-[300px]" />
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="min-h-[200px] w-full">
+          <div className="h-fit w-fit flex flex-col space-y-3 m-4">
+            <Skeleton className="h-[250px] w-[400px] rounded-xl" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

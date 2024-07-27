@@ -43,7 +43,11 @@ export function LanguageChart({
       .sort((a, b) => b.minutes - a.minutes)
       .slice(TOP_N_LANGUAGES)
       .reduce((acc, cur) => acc + cur.minutes, 0);
-    d.push({ hours: (restMinutes / 60).toFixed(2), language: "Rest" });
+
+    d.push({
+      hours: (restMinutes / 60).toFixed(2),
+      language: `Rest`,
+    });
     const m = Math.ceil(
       d.reduce(
         (acc, cur) => (Number(cur.hours) > acc ? Number(cur.hours) : acc),

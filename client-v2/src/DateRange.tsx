@@ -12,6 +12,14 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 export function DatePickerWithRange({
   className,
   setDate,
@@ -47,7 +55,26 @@ export function DatePickerWithRange({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-1" align="start">
+          <Select
+            onValueChange={(value) =>
+              setDate({
+                to: new Date(),
+                from: addDays(new Date(), parseInt(value) * -1),
+              })
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select a range" />
+            </SelectTrigger>
+            <SelectContent position="popper">
+              <SelectItem value="7">1 week</SelectItem>
+              <SelectItem value="30">1 month</SelectItem>
+              <SelectItem value="90">3 months</SelectItem>
+              <SelectItem value="365">1 year</SelectItem>
+              <SelectItem value="1825">5 years</SelectItem>
+            </SelectContent>
+          </Select>
           <Calendar
             initialFocus
             mode="range"
@@ -55,9 +82,36 @@ export function DatePickerWithRange({
             selected={date}
             onSelect={setDate}
             numberOfMonths={2}
+            className="m-2"
           />
         </PopoverContent>
       </Popover>
     </div>
+  );
+}
+
+export function DatePickerWithPresets() {
+  const [date, setDate] = React.useState<Date>();
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "w-[280px] justify-start text-left font-normal",
+            !date && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {date ? format(date, "PPP") : <span>Pick a date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
+        <div className="rounded-md border">
+          <Calendar mode="single" selected={date} onSelect={setDate} />
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }

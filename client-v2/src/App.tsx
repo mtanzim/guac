@@ -2,12 +2,19 @@ import { useEffect, useState } from "react";
 
 import { Banner } from "./Banner";
 import { Login } from "./Login";
-import { TOKEN_KEY } from "./utils";
 import { Plot } from "./Plot";
+import { DEFAULT_DAY_RANGE, TOKEN_KEY } from "./utils";
+import { DateRange } from "react-day-picker";
+import { addDays } from "date-fns";
 
 function App() {
   const [token, setToken] = useState<string | null>(null);
   const isAuthenticated = !!token;
+
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: addDays(new Date(), -DEFAULT_DAY_RANGE),
+    to: new Date(),
+  });
 
   useEffect(() => {
     const curToken = window.localStorage.getItem(TOKEN_KEY);
@@ -36,8 +43,15 @@ function App() {
 
   return (
     <>
-      <Banner onLogout={onLogout} />
-      <Plot onLogout={onLogout} token={token} />
+      <Banner date={date} setDate={setDate} onLogout={onLogout} />
+      {date?.from && date?.to && (
+        <Plot
+          start={date?.from}
+          end={date?.to}
+          onLogout={onLogout}
+          token={token}
+        />
+      )}
     </>
   );
 }

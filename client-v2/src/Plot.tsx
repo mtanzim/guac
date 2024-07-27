@@ -2,22 +2,31 @@ import { useEffect, useState } from "react";
 import { DailyChart } from "./DailyChart";
 import { StatsData } from "./data-types";
 import { LanguageChart } from "./LanguageChart";
-import { ProjectChart } from "./ProjectChart";
-import { BASE_URL, DEFAULT_DAY_RANGE, getDateRange } from "./utils";
 import { LanguagePct } from "./LanguagePct";
+import { ProjectChart } from "./ProjectChart";
+import {
+  BASE_URL,
+  formatDateForReq
+} from "./utils";
 
 export function Plot({
   onLogout,
   token,
+  start,
+  end,
 }: {
   onLogout: () => void;
   token: string;
+  start: Date;
+  end: Date;
 }) {
   const [data, setData] = useState<null | StatsData>(null);
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState<null | string>(null);
+
   useEffect(() => {
-    const { starting, ending } = getDateRange(DEFAULT_DAY_RANGE);
+    const starting = formatDateForReq(start);
+    const ending = formatDateForReq(end);
     const url =
       starting && ending
         ? `${BASE_URL}/api/v1/data?start=${starting}&end=${ending}`
@@ -41,7 +50,7 @@ export function Plot({
         onLogout();
       })
       .finally(() => setLoading(false));
-  }, [token, onLogout]);
+  }, [token, onLogout, start, end]);
 
   if (loading) {
     return <p>Loading...</p>;

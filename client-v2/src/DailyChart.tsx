@@ -35,7 +35,9 @@ export function DailyChart({
     hours: (d.minutes / 60).toFixed(2),
     date: d.date,
   }));
-
+  if (loading) {
+    return <SkeletonChart />;
+  }
   return (
     <Card>
       <CardHeader>
@@ -44,23 +46,19 @@ export function DailyChart({
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-          {loading ? (
-            <SkeletonChart />
-          ) : (
-            <BarChart accessibilityLayer data={chartData}>
-              <CartesianGrid vertical={false} />
-              <YAxis dataKey={"hours"} />
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={toCustomDateStr}
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey={"hours"} radius={4} />;
-            </BarChart>
-          )}
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} />
+            <YAxis dataKey={"hours"} />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={toCustomDateStr}
+            />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <Bar dataKey={"hours"} radius={4} />;
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>

@@ -56,7 +56,9 @@ export function ProjectChart({
 
     return [d, m];
   }, [projectDurations]);
-
+  if (loading) {
+    return <SkeletonChart />;
+  }
   return (
     <Card>
       <CardHeader>
@@ -65,22 +67,18 @@ export function ProjectChart({
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-          {loading ? (
-            <SkeletonChart />
-          ) : (
-            <BarChart accessibilityLayer data={chartData}>
-              <CartesianGrid vertical={false} />
-              <YAxis domain={[0, maxY + 2]} dataKey={"hours"} />
-              <XAxis
-                dataKey="project"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey={"hours"} radius={4} />;
-            </BarChart>
-          )}
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} />
+            <YAxis domain={[0, maxY + 2]} dataKey={"hours"} />
+            <XAxis
+              dataKey="project"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+            />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <Bar dataKey={"hours"} radius={4} />;
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>

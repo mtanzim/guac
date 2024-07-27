@@ -59,7 +59,9 @@ export function LanguageChart({
     );
     return [d, m];
   }, [languageDurations]);
-
+  if (loading) {
+    return <SkeletonChart />;
+  }
   return (
     <Card>
       <CardHeader>
@@ -68,27 +70,23 @@ export function LanguageChart({
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-          {loading ? (
-            <SkeletonChart />
-          ) : (
-            <BarChart accessibilityLayer data={chartData}>
-              <CartesianGrid vertical={false} />
-              <YAxis domain={[0, maxY + 2]} dataKey={"hours"} />
-              <XAxis
-                dataKey="language"
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey={"hours"} radius={4}>
-                {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={getColor(entry.language)} />
-                ))}
-              </Bar>
-              ;
-            </BarChart>
-          )}
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} />
+            <YAxis domain={[0, maxY + 2]} dataKey={"hours"} />
+            <XAxis
+              dataKey="language"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+            />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <Bar dataKey={"hours"} radius={4}>
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={getColor(entry.language)} />
+              ))}
+            </Bar>
+            ;
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>

@@ -12,7 +12,7 @@ export function Banner({
   date?: DateRange;
 }) {
   return (
-    <div className="flex bg-slate-400 p-6 gap-8 items-center">
+    <div className="flex flex-col md:flex-row bg-slate-400 p-6 gap-8 items-center">
       <h2 className="text-xl ">Waka Dashboard</h2>
       <DatePickerWithRange date={date} setDate={setDate} />
       <Button className="mr-4" onClick={onLogout}>

@@ -46,3 +46,4 @@ samconfig.toml
 guac-forestore-cred.json
 .scannerwork
 cmd/server/__debug_bin
+dist

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script src="deps/plotly.min.js"></script>
+    <script type="module" src="main.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <title>Wakatime Dashboard</title>
+  </head>
+  <body onload="initWaka();">
+    <div class="content">
+      <div class="jumbo">
+        <h1>Wakatime Dashboard</h1>
+        <div class="subtitle-container fade-in">
+          <small id="subtitle"></small>
+        </div>
+        <div id="control-btns">
+          <button class="button control" id="one-wk">Last week</button>
+          <button class="button control" id="two-wk">Last 2 weeks</button>
+          <button class="button control" id="last-m">Last Month</button>
+          <button class="button control" id="last-3m">Last 3 Months</button>
+          <button class="button control" id="all-time">All Time</button>
+          <br />
+          <br />
+          <button class="button" id="logout-btn" onclick="logoutWaka();">
+            Logout
+          </button>
+        </div>
+        <div id="login-form">
+          <form>
+            <label>Username</label>
+            <input type="text" id="username" name="username" /><br />
+            <label>Password</label>
+            <input type="password" id="pass" name="pass" /><br /><br />
+          </form>
+          <button id="login-btn">Submit</button>
+        </div>
+        <p id="error"></p>
+      </div>
+      <div id="plots" class="plots">
+        <div class="plot-item" id="lang-pie"></div>
+        <div class="plot-item" id="daily-dur"></div>
+        <div class="plot-item" id="lang-dur"></div>
+        <div class="plot-item" id="proj-dur"></div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+  input {
+    width: 150px;
+    padding: 4px 12px;
+    margin: 8px 0;
+    margin-left: 16px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1.5px solid #dfdfdf;
+  }
+
+  button {
+    background-color: #008cba;
+    border: 2px solid white;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: auto;
+  }
+
+  .control {
+    padding: 6px 12px;
+    font-size: 16px;
+    border-radius: 16px;
+    margin-bottom: 8px;
+  }
+
+  .control-active {
+    background-color: salmon;
+  }
+
+  button:hover {
+    background-color: white; /* Green */
+    color: #008cba;
+    border: 2px solid #008cba;
+  }
+  .subtitle-container {
+    margin-bottom: 36px;
+    font-size: large;
+    min-height: 48px;
+  }
+
+  .content {
+    margin: auto;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 9fr;
+  }
+  .content-on-login {
+    grid-template-columns: 1fr;
+  }
+  .jumbo {
+    padding: 32px;
+    margin-right: 1vw;
+    margin-left: 1vw;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    background-color: aliceblue;
+    max-height: 90vh;
+  }
+  .plots {
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    grid-gap: 52px;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    margin-left: 24px;
+    margin-right: 24px;
+    max-height: 94vh;
+    overflow-y: auto;
+  }
+  .plot-item {
+    border: 1px solid #dfdfdf;
+    padding: 16px;
+    min-height: 700px;
+  }
+  .fade-in {
+    opacity: 1;
+    animation-name: fadeIn;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 0.75s;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+  }
+</style>

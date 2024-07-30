@@ -14,9 +14,9 @@ export function Banner({
   return (
     <div className="flex flex-col md:flex-row bg-slate-400 p-6 gap-8 items-center">
       <h2 className="text-xl ">Waka Dashboard</h2>
-      <div className="flex gap-2">
+      <div className="flex flex-col md:flex-row gap-4">
       <DatePickerWithRange date={date} setDate={setDate} />
-      <Button className="mr-4" onClick={onLogout}>
+      <Button className="" onClick={onLogout}>
         Logout
       </Button>
       </div>

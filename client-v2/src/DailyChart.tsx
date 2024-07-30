@@ -24,7 +24,6 @@ export function DailyChart({
   dailyDuration?: StatsData["dailyDuration"];
   loading: boolean;
 }) {
-  console.log({ dailyDuration });
   const chartConfig = {
     hours: {
       label: "Hours",

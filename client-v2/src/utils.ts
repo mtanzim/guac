@@ -1,9 +1,17 @@
 import * as colors from "./colors.json";
 
 export const toCustomDateStr = (d: string): string => {
-  return new Date(d).toLocaleDateString(undefined, {
+  return new Date(d).toLocaleDateString("en-US", {
     month: "short",
     day: "2-digit",
+  });
+};
+
+export const toCustomDateStrWithYear = (d: string): string => {
+  return new Date(d).toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
   });
 };
 

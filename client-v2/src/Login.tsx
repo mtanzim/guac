@@ -36,7 +36,7 @@ export function Login({ onLogin }: { onLogin: (t: string) => void }) {
     }
   };
   return (
-    <div className="w-full max-w-sm items-center">
+    <div className="w-11/12 max-w-sm md:w-full items-center">
       <Input
         value={username}
         onChange={(e) => setUsername(e.target.value)}

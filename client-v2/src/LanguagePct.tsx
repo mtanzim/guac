@@ -55,7 +55,8 @@ export function LanguagePct({
   const percentages = (rawPercentages || [])
     .slice()
     .sort((a, b) => b.percentage - a.percentage)
-    .slice(0, TOP_N_LANGUAGES);
+    .slice(0, TOP_N_LANGUAGES)
+    .map((p) => ({ ...p, percentage: Number(p.percentage.toFixed(1)) }));
   const totalPct = percentages.reduce((acc, cur) => acc + cur.percentage, 0);
   percentages.push({ percentage: 100 - totalPct, language: "Rest" });
 

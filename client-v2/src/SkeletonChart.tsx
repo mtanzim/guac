@@ -12,16 +12,16 @@ export function SkeletonChart() {
     <Card>
       <CardHeader>
         <CardTitle>
-          <Skeleton className="h-4 w-[300px]" />
+          <Skeleton className="h-4 md:w-[300px]" />
         </CardTitle>
         <CardDescription>
-          <Skeleton className="h-4 w-[300px]" />
+          <Skeleton className="h-4 md:w-[300px]" />
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="min-h-[200px] w-full">
           <div className="h-fit w-fit flex flex-col space-y-3 m-4">
-            <Skeleton className="h-[250px] w-[400px] rounded-xl" />
+            <Skeleton className="h-[250px] md:w-[400px] rounded-xl" />
           </div>
         </div>
       </CardContent>

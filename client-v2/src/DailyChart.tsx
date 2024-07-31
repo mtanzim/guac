@@ -32,7 +32,7 @@ export function DailyChart({
 
   const chartData = (dailyDuration || []).map((d) => ({
     hours: (d.minutes / 60).toFixed(2),
-    date: d.date,
+    date: toCustomDateStr(d.date),
   }));
   if (loading) {
     return <SkeletonChart />;

@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "./components/ui/card";
 import { StatsData } from "./data-types";
-import { toCustomDateStr } from "./utils";
+import { toCustomDateStr, toCustomDateStrWithYear } from "./utils";
 import { SkeletonChart } from "./SkeletonChart";
 
 export function DailyChart({
@@ -30,9 +30,14 @@ export function DailyChart({
     },
   } satisfies ChartConfig;
 
+  const dateFormatter =
+    (dailyDuration || [])?.length > Math.floor(365 / 2)
+      ? toCustomDateStrWithYear
+      : toCustomDateStr;
+
   const chartData = (dailyDuration || []).map((d) => ({
     hours: (d.minutes / 60).toFixed(2),
-    date: d.date,
+    date: dateFormatter(d.date),
   }));
   if (loading) {
     return <SkeletonChart />;
@@ -53,7 +58,7 @@ export function DailyChart({
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={toCustomDateStr}
+              tickFormatter={dateFormatter}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Bar dataKey={"hours"} radius={4} />;

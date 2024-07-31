@@ -7,6 +7,14 @@ export const toCustomDateStr = (d: string): string => {
   });
 };
 
+export const toCustomDateStrWithYear = (d: string): string => {
+  return new Date(d).toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+};
+
 export const formatDateForReq = (date: Date) => {
   return date.toISOString().split("T")[0];
 };

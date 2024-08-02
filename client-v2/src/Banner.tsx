@@ -16,14 +16,14 @@ export function Banner({
       <h2 className="text-xl ">Waka Dashboard</h2>
       <div className="flex flex-col md:flex-row gap-4">
         <DatePickerWithRange date={date} setDate={setDate} />
-        <a href="/v1">
-          <Button variant="outline" className="">
-            Use v1
-          </Button>
-        </a>
         <Button className="" onClick={onLogout}>
           Logout
         </Button>
+        <a href="/v1">
+          <Button variant="outline" className="w-full">
+            Use v1
+          </Button>
+        </a>
       </div>
     </div>
   );

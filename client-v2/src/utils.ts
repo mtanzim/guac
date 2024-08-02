@@ -1,18 +1,18 @@
 import * as colors from "./colors.json";
+import { format } from "date-fns";
+
+const fixDateOffset = (d: string): Date => {
+  const date = new Date(d);
+  const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() + userTimezoneOffset);
+};
 
 export const toCustomDateStr = (d: string): string => {
-  return new Date(d).toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-  });
+  return format(fixDateOffset(d), "MMM dd");
 };
 
 export const toCustomDateStrWithYear = (d: string): string => {
-  return new Date(d).toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  });
+  return format(fixDateOffset(d), "MMM dd, yyyy");
 };
 
 export const formatDateForReq = (date: Date) => {

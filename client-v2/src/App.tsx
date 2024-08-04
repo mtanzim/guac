@@ -6,6 +6,7 @@ import { Plot } from "./Plot";
 import { DEFAULT_DAY_RANGE, TOKEN_KEY } from "./utils";
 import { DateRange } from "react-day-picker";
 import { addDays } from "date-fns";
+import { ThemeProvider } from "./components/theme-provider";
 
 function App() {
   const [token, setToken] = useState<string | null>(null);
@@ -42,7 +43,7 @@ function App() {
   }
 
   return (
-    <>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Banner date={date} setDate={setDate} onLogout={onLogout} />
       {date?.from && date?.to && (
         <Plot
@@ -52,10 +53,8 @@ function App() {
           token={token}
         />
       )}
-    </>
+    </ThemeProvider>
   );
 }
-
-
 
 export default App;

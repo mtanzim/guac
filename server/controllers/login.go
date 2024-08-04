@@ -47,7 +47,7 @@ func LoginController(w http.ResponseWriter, req *http.Request) {
 			t.Username,
 			jwt.StandardClaims{
 				// in ms
-				ExpiresAt: (time.Now().Unix() * 1000) + time.Hour.Milliseconds(),
+				ExpiresAt: (time.Now().Unix() * 1000) + 7*24*time.Hour.Milliseconds(),
 				Issuer:    "guac",
 			},
 		}

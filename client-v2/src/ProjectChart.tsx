@@ -39,6 +39,7 @@ export function ProjectChart({
       .map((d) => ({
         hours: (d.minutes / 60).toFixed(2),
         project: d.project,
+        fill: "hsl(var(--chart-1))",
       }));
 
     const restMinutes = (projectDurations || [])
@@ -46,7 +47,15 @@ export function ProjectChart({
       .sort((a, b) => b.minutes - a.minutes)
       .slice(TOP_N_PROJECTS)
       .reduce((acc, cur) => acc + cur.minutes, 0);
-    d.push({ hours: (restMinutes / 60).toFixed(2), project: "Rest" });
+
+    if (restMinutes > 0) {
+      d.push({
+        hours: (restMinutes / 60).toFixed(2),
+        project: "Rest",
+        fill: "hsl(var(--chart-1))",
+      });
+    }
+
     const m = Math.ceil(
       d.reduce(
         (acc, cur) => (Number(cur.hours) > acc ? Number(cur.hours) : acc),

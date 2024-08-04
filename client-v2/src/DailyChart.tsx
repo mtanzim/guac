@@ -38,6 +38,7 @@ export function DailyChart({
   const chartData = (dailyDuration || []).map((d) => ({
     hours: (d.minutes / 60).toFixed(2),
     date: dateFormatter(d.date),
+    fill: "hsl(var(--chart-1))",
   }));
   if (loading) {
     return <SkeletonChart />;

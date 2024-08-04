@@ -21,7 +21,7 @@ export function Banner({
   date?: DateRange;
 }) {
   return (
-    <div className="flex flex-col md:flex-row bg-slate-400 p-6 gap-8 items-center">
+    <div className="flex flex-col md:flex-row p-6 m-4 gap-8 items-center border-2 mb-4 rounded-md">
       <div className="md:w-11/12 flex gap-4">
       <Button variant="outline" className="text-xl ">Waka Dashboard</Button>
       <ModeToggle />

@@ -1,4 +1,4 @@
-import { addDays, format } from "date-fns";
+import { addDays, format, endOfToday } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import * as React from "react";
 import { DateRange } from "react-day-picker";
@@ -78,6 +78,7 @@ export function DatePickerWithRange({
           <Calendar
             initialFocus
             mode="range"
+            toDate={endOfToday()}
             defaultMonth={date?.to}
             selected={date}
             onSelect={setDate}

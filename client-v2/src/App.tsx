@@ -5,7 +5,7 @@ import { Login } from "./Login";
 import { Plot } from "./Plot";
 import { DEFAULT_DAY_RANGE, TOKEN_KEY } from "./utils";
 import { DateRange } from "react-day-picker";
-import { addDays } from "date-fns";
+import { addDays, endOfToday } from "date-fns";
 import { ThemeProvider } from "./components/theme-provider";
 
 function App() {
@@ -13,8 +13,8 @@ function App() {
   const isAuthenticated = !!token;
 
   const [date, setDate] = useState<DateRange | undefined>({
-    from: addDays(new Date(), -DEFAULT_DAY_RANGE),
-    to: new Date(),
+    from: addDays(endOfToday(), -DEFAULT_DAY_RANGE),
+    to: endOfToday(),
   });
 
   useEffect(() => {

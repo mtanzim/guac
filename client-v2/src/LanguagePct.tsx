@@ -133,7 +133,11 @@ export function LanguagePct({
               )}
             >
               {percentages.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getColor(entry.language)} />
+                <Cell
+                  onClick={() => setActive(entry.language)}
+                  key={`cell-${index}`}
+                  fill={getColor(entry.language)}
+                />
               ))}
               <Label
                 content={({ viewBox }) => {

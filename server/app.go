@@ -34,7 +34,7 @@ func Start() {
 	router.Handle(ApiURL+"/login", allowCORS(http.HandlerFunc(controllers.LoginController)))
 	router.Handle(ApiURL+"/data", allowCORS(auth.AuthVerify(http.HandlerFunc(controllers.DataController))))
 	router.Handle(ApiURL+"/plot", auth.AuthVerify(http.HandlerFunc(controllers.PlotController)))
-	router.Handle(ApiURL+"/plot-unauth", http.HandlerFunc(controllers.PlotController))
+	router.Handle(ApiURL+"/plot-image-unauth", http.HandlerFunc(controllers.PlotImageController))
 
 	port := os.Getenv("REST_PORT")
 	if port == "" {

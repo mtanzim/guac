@@ -33,9 +33,7 @@ func Start() {
 	router.HandleFunc(ApiURL+"/health", controllers.HealthController)
 	router.Handle(ApiURL+"/login", allowCORS(http.HandlerFunc(controllers.LoginController)))
 	router.Handle(ApiURL+"/data", allowCORS(auth.AuthVerify(http.HandlerFunc(controllers.DataController))))
-	// Backend plots are disabled
-	// http.Handle(ApiURL+"/", auth.AuthVerify(http.HandlerFunc(controllers.RootController)))
-	// http.Handle(ApiURL+"/plot", http.HandlerFunc(controllers.PlotController))
+	router.Handle(ApiURL+"/plot", http.HandlerFunc(controllers.PlotController))
 
 	port := os.Getenv("REST_PORT")
 	if port == "" {

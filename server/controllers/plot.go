@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/go-echarts/snapshot-chromedp/render"
 	"github.com/mtanzim/guac/plotData"
 	"github.com/mtanzim/guac/server/services"
 	"github.com/mtanzim/guac/server/utils"
@@ -45,6 +46,7 @@ func PlotController(w http.ResponseWriter, req *http.Request) {
 	case "languagePie":
 		rv := services.DataService(reqStart, reqEnd)
 		pie := plotData.LanguagePie(rv.LangStats, rv.StartDate, rv.EndDate)
+		render.MakeChartSnapshot(pie.RenderContent(), "test.png")
 		pie.Render(w)
 	default:
 		rv := services.DataService(reqStart, reqEnd)

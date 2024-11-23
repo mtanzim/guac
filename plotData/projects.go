@@ -30,7 +30,7 @@ func ProjectBarChart(projStats processData.ProjectStat, start, end string) *char
 		ys = append(ys, opts.BarData{Value: h})
 	}
 
-	seriesOpts := charts.WithEmphasisOpts(opts.Emphasis{Label: &opts.Label{Show: true, Color: "black", Position: "top", Formatter: "{c} hours on {b}"}})
+	seriesOpts := charts.WithEmphasisOpts(opts.Emphasis{Label: &opts.Label{Show: opts.Bool(true), Color: "black", Position: "top", Formatter: "{c} hours on {b}"}})
 
 	bar.SetXAxis(xs).
 		AddSeries("Duration (hours)", ys, charts.SeriesOpts(seriesOpts))

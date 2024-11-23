@@ -18,7 +18,8 @@ func LanguagePie(langStats processData.LanguageStat, start, end string) *charts.
 			Left:     "center",
 		},
 	),
-		charts.WithLegendOpts(opts.Legend{Orient: "vertical", Show: true, Left: "left"}),
+		charts.WithLegendOpts(opts.Legend{Orient: "vertical", Show: opts.Bool(true), Left: "left"}),
+		charts.WithAnimation(false),
 	)
 
 	var items []opts.PieData
@@ -61,7 +62,7 @@ func LanguageBarChart(langStats processData.LanguageStat, start, end string) *ch
 		ys = append(ys, opts.BarData{Value: h})
 	}
 
-	seriesOpts := charts.WithEmphasisOpts(opts.Emphasis{Label: &opts.Label{Show: true, Color: "black", Position: "top", Formatter: "{c} hours on {b}"}})
+	seriesOpts := charts.WithEmphasisOpts(opts.Emphasis{Label: &opts.Label{Show: opts.Bool(true), Color: "black", Position: "top", Formatter: "{c} hours on {b}"}})
 
 	bar.SetXAxis(xs).
 		AddSeries("Duration (hours)", ys, charts.SeriesOpts(seriesOpts))

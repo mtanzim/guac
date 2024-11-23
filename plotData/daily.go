@@ -29,7 +29,7 @@ func DailyBarChart(dailyStats []processData.DailyStat, start, end string) *chart
 		h = math.Round(h*100) / 100
 		ys = append(ys, opts.BarData{Value: h})
 	}
-	seriesOpts := charts.WithEmphasisOpts(opts.Emphasis{Label: &opts.Label{Show: true, Color: "black", Position: "top", Formatter: "{c} hours on {b}"}})
+	seriesOpts := charts.WithEmphasisOpts(opts.Emphasis{Label: &opts.Label{Show: opts.Bool(true), Color: "black", Position: "top", Formatter: "{c} hours on {b}"}})
 
 	// Put data into instance
 	bar.SetXAxis(xs).

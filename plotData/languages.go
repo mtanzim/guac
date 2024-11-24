@@ -8,6 +8,37 @@ import (
 	"github.com/mtanzim/guac/processData"
 )
 
+func LanguagePieMinimal(langStats processData.LanguageStat, start, end string, topK int) *charts.Pie {
+	colors := NewColors()
+	pie := charts.NewPie()
+	pie.SetGlobalOptions(charts.WithTitleOpts(
+		opts.Title{
+			Title: "",
+			Left:  "center",
+		},
+	),
+		charts.WithLegendOpts(opts.Legend{Orient: "vertical", Show: opts.Bool(false), Left: "left"}),
+		charts.WithAnimation(false),
+	)
+
+	var items []opts.PieData
+	for _, v := range langStats.Percentages {
+		items = append(items,
+			opts.PieData{
+				Name:      v.Name,
+				Value:     v.Pct,
+				ItemStyle: &opts.ItemStyle{Color: colors.GetColor(v.Name)},
+			})
+	}
+
+	pie.AddSeries("pie", items).SetSeriesOptions(
+		charts.WithPieChartOpts(opts.PieChart{
+			Radius: []string{"40%", "75%"},
+		}),
+	)
+	return pie
+}
+
 func LanguagePie(langStats processData.LanguageStat, start, end string) *charts.Pie {
 	colors := NewColors()
 	pie := charts.NewPie()
@@ -19,7 +50,6 @@ func LanguagePie(langStats processData.LanguageStat, start, end string) *charts.
 		},
 	),
 		charts.WithLegendOpts(opts.Legend{Orient: "vertical", Show: opts.Bool(true), Left: "left"}),
-		charts.WithAnimation(false),
 	)
 
 	var items []opts.PieData

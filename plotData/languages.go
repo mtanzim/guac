@@ -36,6 +36,12 @@ func LanguagePieMinimal(langStats processData.LanguageStat, start, end string, t
 		charts.WithPieChartOpts(opts.PieChart{
 			Radius: []string{"40%", "75%"},
 		}),
+		charts.WithLabelOpts(opts.Label{
+			Color:      "#85d4e6",
+			FontWeight: "200",
+			FontSize:   12,
+			FontFamily: "monospace",
+		}),
 	)
 	return pie
 }

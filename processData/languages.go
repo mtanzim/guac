@@ -107,6 +107,26 @@ func languagePct(durations map[string]float64) ([]LangPct, error) {
 	return percentages, nil
 }
 
+func KLanguagePct(pcts []LangPct, topK int) []LangPct {
+	restLangPct := &LangPct{
+		Name: "Others",
+		Pct:  0.0,
+	}
+	res := []LangPct{}
+	for i, v := range pcts {
+		if i < topK {
+			res = append(res, v)
+			continue
+		}
+		restLangPct.Pct += v.Pct
+	}
+	if restLangPct.Pct > 0 {
+		res = append(res, *restLangPct)
+	}
+	return res
+
+}
+
 func transformLangDurationsMap(durations map[string]float64) []LangDur {
 	var durationsSlc []LangDur
 	for k, v := range durations {
@@ -122,6 +142,7 @@ func LanguageSummary(input []firestoreClient.Item) LanguageStat {
 	durations := languageDuration(input)
 	pct, err := languagePct(durations)
 	if err != nil {
+		// TODO: why panic here?
 		log.Fatalln(err.Error())
 	}
 	durationsSlc := transformLangDurationsMap(durations)

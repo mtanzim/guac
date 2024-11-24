@@ -64,7 +64,7 @@ func PlotController(w http.ResponseWriter, req *http.Request) {
 
 }
 
-func PlotImageController(w http.ResponseWriter, req *http.Request) {
+func PiePlotImageController(w http.ResponseWriter, req *http.Request) {
 
 	reqStart := req.URL.Query().Get("start")
 	reqEnd := req.URL.Query().Get("end")

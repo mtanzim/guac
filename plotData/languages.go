@@ -21,8 +21,9 @@ func LanguagePieMinimal(langStats processData.LanguageStat, start, end string, t
 		charts.WithAnimation(false),
 	)
 
+	topKPcts := processData.KLanguagePct(langStats.Percentages, int(topK))
 	var items []opts.PieData
-	for _, v := range langStats.Percentages {
+	for _, v := range topKPcts {
 		items = append(items,
 			opts.PieData{
 				Name:      v.Name,

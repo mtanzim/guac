@@ -107,9 +107,71 @@ func languagePct(durations map[string]float64) ([]LangPct, error) {
 	return percentages, nil
 }
 
+const (
+	RestLang   = "Rest"
+	MarkupLang = "Markup and config"
+)
+
+func SynonimizeLanguagePcts(pcts []LangPct) []LangPct {
+
+	synonyms := map[string]string{
+		"JSX":             "JavaScript",
+		"JSON":            "JavaScript",
+		"TSX":             "Typescript",
+		"Astro":           "Typescript",
+		"YAML":            MarkupLang,
+		"HTML":            MarkupLang,
+		"Text":            MarkupLang,
+		"XML":             MarkupLang,
+		"INI":             MarkupLang,
+		"Smarty":          MarkupLang,
+		"Markdown":        MarkupLang,
+		"Docker":          MarkupLang,
+		"TOML":            MarkupLang,
+		"Makefile":        MarkupLang,
+		"Image (svg)":     MarkupLang,
+		"Git Config":      MarkupLang,
+		"TSConfig":        MarkupLang,
+		"Protocol Buffer": MarkupLang,
+		"Terraform":       MarkupLang,
+		"CSV":             MarkupLang,
+		"Crontab":         MarkupLang,
+		"Git":             MarkupLang,
+		"Other":           MarkupLang,
+	}
+	pctHm := map[string]float64{}
+	for _, v := range pcts {
+		pctHm[v.Name] = v.Pct
+	}
+	pctHmPrime := map[string]float64{}
+	for k, v := range pctHm {
+		synK, ok := synonyms[k]
+		if !ok {
+			pctHmPrime[k] = v
+			continue
+		}
+		curPctVal, alreadyThere := pctHmPrime[synK]
+		if alreadyThere {
+			pctHmPrime[synK] = v + curPctVal
+			continue
+		}
+		pctHmPrime[synK] = v
+
+	}
+	res := []LangPct{}
+	for k, v := range pctHmPrime {
+		res = append(res, LangPct{Name: k, Pct: v})
+	}
+	return res
+
+}
+
 func KLanguagePct(pcts []LangPct, topK int) []LangPct {
+	sort.Slice(pcts, func(i, j int) bool {
+		return pcts[i].Pct > pcts[j].Pct
+	})
 	restLangPct := &LangPct{
-		Name: "Others",
+		Name: RestLang,
 		Pct:  0.0,
 	}
 	res := []LangPct{}

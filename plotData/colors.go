@@ -3,7 +3,6 @@ package plotData
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -27,7 +26,7 @@ func NewColors() *LanguageColors {
 	jsonFile, err := os.Open("public/v1/colors.json")
 	// if we os.Open returns an error then handle it
 	if err != nil {
-		log.Fatalln(err)
+		return &LanguageColors{Colors: make(map[string]string)}
 	}
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer jsonFile.Close()

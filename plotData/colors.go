@@ -24,10 +24,11 @@ func (c LanguageColors) GetColor(name string) string {
 func NewColors() *LanguageColors {
 
 	// Open our jsonFile
-	jsonFile, err := os.Open("public/colors.json")
+	jsonFile, err := os.Open("public/v1/colors.json")
 	// if we os.Open returns an error then handle it
 	if err != nil {
-		log.Fatalln(err)
+		log.Printf("failed to load colors file: %v", err)
+		return &LanguageColors{Colors: make(map[string]string)}
 	}
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer jsonFile.Close()

@@ -8,7 +8,7 @@ import (
 	"github.com/mtanzim/guac/processData"
 )
 
-func LanguagePieMinimal(langStats processData.LanguageStat, start, end string, topK int) *charts.Pie {
+func LanguagePieMinimal(langStats processData.LanguageStat, start, end string, topK int64) *charts.Pie {
 	colors := NewColors()
 	pie := charts.NewPie()
 	pie.SetGlobalOptions(charts.WithTitleOpts(

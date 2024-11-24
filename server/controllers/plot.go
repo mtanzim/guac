@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/chromedp/chromedp"
@@ -68,6 +69,19 @@ func PlotImageController(w http.ResponseWriter, req *http.Request) {
 	reqStart := req.URL.Query().Get("start")
 	reqEnd := req.URL.Query().Get("end")
 
+	topK := int64(5)
+	topKs := req.URL.Query().Get("topK")
+	if topKs != "" {
+		k, err := strconv.ParseInt(topKs, 10, 0)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			log.Printf("error: %v\n", err)
+			w.Write([]byte("top k must be an int"))
+			return
+		}
+		topK = k
+	}
+
 	if reqStart == "" || reqEnd == "" {
 		reqStart, reqEnd = os.Getenv("START"), os.Getenv("END")
 
@@ -85,7 +99,7 @@ func PlotImageController(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "application/octet-stream")
 	rv := services.DataService(reqStart, reqEnd)
-	pie := plotData.LanguagePie(rv.LangStats, rv.StartDate, rv.EndDate)
+	pie := plotData.LanguagePieMinimal(rv.LangStats, rv.StartDate, rv.EndDate, topK)
 
 	bs := pie.RenderContent()
 	imgBs, err := makeSnapshot(bs)

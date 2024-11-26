@@ -1,0 +1,7 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    script: |
+      docker build -f Dockerfile.job -t us-west2-docker.pkg.dev/$PROJECT_ID/guac-jobs/persist-waka:v0.0.1 .
+    automapSubstitutions: true
+images:
+  - "us-west2-docker.pkg.dev/$PROJECT_ID/guac-jobs/persist-waka:v0.0.1"

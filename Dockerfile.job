@@ -5,7 +5,6 @@ COPY go.sum .
 RUN go mod download
 COPY . .
 RUN go build -o /go/bin/job ./cmd/jobs/main.go
-CMD ["sh", "-c", "tail -f /dev/null"]
 
 FROM golang:1.23
 COPY --from=base /go/bin/job /go/bin/job

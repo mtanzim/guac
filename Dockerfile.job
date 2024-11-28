@@ -1,3 +1,4 @@
+# waka api persister dockerfile, deployed manually
 FROM golang:1.23 as base
 WORKDIR /go/src/app
 COPY go.mod .

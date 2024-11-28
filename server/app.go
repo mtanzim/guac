@@ -10,8 +10,7 @@ import (
 )
 
 var (
-	ApiURL  = "/api/v1"
-	PlotURL = "/plot/v1"
+	ApiURL = "/api/v1"
 )
 
 func allowCORS(next http.Handler) http.Handler {
@@ -34,7 +33,6 @@ func Start() {
 	router.HandleFunc(ApiURL+"/health", controllers.HealthController)
 	router.Handle(ApiURL+"/login", allowCORS(http.HandlerFunc(controllers.LoginController)))
 	router.Handle(ApiURL+"/data", allowCORS(auth.AuthVerify(http.HandlerFunc(controllers.DataController))))
-	router.Handle(PlotURL+"/pie", auth.AuthVerify(http.HandlerFunc(controllers.PiePlotImageController)))
 
 	port := os.Getenv("REST_PORT")
 	if port == "" {

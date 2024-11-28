@@ -48,3 +48,5 @@ guac-forestore-cred.json
 cmd/server/__debug_bin
 dist
 tmp
+lang-stats.png
+guac-pie-plot.png

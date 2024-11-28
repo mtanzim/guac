@@ -20,6 +20,8 @@ func getAuthHeader() string {
 
 func getData() []byte {
 	baseUrl := os.Getenv("BASE_URL")
+	log.Printf("using url: %s\n", baseUrl)
+
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", baseUrl, nil)
 	if err != nil {
@@ -31,6 +33,7 @@ func getData() []byte {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("status code from wakatime: %d\n", resp.StatusCode)
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {

@@ -2,19 +2,19 @@ name: Persist WakaTime
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 8 * * *"
+  # schedule:
+    # - cron: "0 8 * * *"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.16
+          go-version: 1.23.3
 
       - name: Build
         run: go build -o persist cmd/persister/main.go

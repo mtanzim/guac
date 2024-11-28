@@ -15,4 +15,5 @@ RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
 COPY --from=base /go/bin/image-job /go/bin/image-job
 RUN mkdir -p /go/bin/public/v1/
 COPY --from=base /go/src/app/public/v1/colors.json /go/bin/public/v1/colors.json
-CMD ["/go/bin/image-job"]
+WORKDIR /go/bin
+CMD ["./image-job"]

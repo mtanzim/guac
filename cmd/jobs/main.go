@@ -42,7 +42,7 @@ func configFromEnv() (Config, error) {
 	projectID := os.Getenv("GOOGLE_PROJECT_ID")
 
 	if apiKey == "" || baseUrl == "" || collName == "" || projectID == "" {
-		return Config{}, errors.New("env vars not correctly configure")
+		return Config{}, errors.New("env vars not correctly configured")
 	}
 
 	config := Config{

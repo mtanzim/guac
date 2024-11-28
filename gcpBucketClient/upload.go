@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"time"
 
@@ -11,9 +12,7 @@ import (
 )
 
 // uploadFile uploads an object.
-func UploadFile(w io.Writer, bucket, object, filePath string) error {
-	// bucket := "bucket-name"
-	// object := "object-name"
+func UploadFile(bucketName, objectName, filePath string) error {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
@@ -31,20 +30,7 @@ func UploadFile(w io.Writer, bucket, object, filePath string) error {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
 	defer cancel()
 
-	o := client.Bucket(bucket).Object(object)
-
-	// Optional: set a generation-match precondition to avoid potential race
-	// conditions and data corruptions. The request to upload is aborted if the
-	// object's generation number does not match your precondition.
-	// For an object that does not yet exist, set the DoesNotExist precondition.
-	// o = o.If(storage.Conditions{DoesNotExist: true})
-	// If the live object already exists in your bucket, set instead a
-	// generation-match precondition using the live object's generation number.
-	// attrs, err := o.Attrs(ctx)
-	// if err != nil {
-	// 	return fmt.Errorf("object.Attrs: %w", err)
-	// }
-	// o = o.If(storage.Conditions{GenerationMatch: attrs.Generation})
+	o := client.Bucket(bucketName).Object(objectName)
 
 	// Upload an object with storage.Writer.
 	wc := o.NewWriter(ctx)
@@ -54,6 +40,6 @@ func UploadFile(w io.Writer, bucket, object, filePath string) error {
 	if err := wc.Close(); err != nil {
 		return fmt.Errorf("Writer.Close: %w", err)
 	}
-	fmt.Fprintf(w, "Blob %v uploaded.\n", object)
+	log.Printf("Blob %v uploaded to gcp buckets\n", objectName)
 	return nil
 }

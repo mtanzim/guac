@@ -50,7 +50,7 @@ func jobFn(months int, topK int, bucketName string) error {
 	if err != nil {
 		return err
 	}
-	bucketClient.UploadFile(log.Writer(), bucketName, filePath, filePath)
+	bucketClient.UploadFile(bucketName, filePath, filePath)
 	return nil
 }
 
@@ -77,8 +77,15 @@ func configFromEnv() (Config, error) {
 	months := os.Getenv("PLOT_MONTHS")
 	topK := os.Getenv("PLOT_TOPK")
 
+	_, err := os.Open("./public/v1/colors.json")
+	if err == nil {
+		log.Println("found colors file")
+	} else {
+		return Config{}, err
+	}
+
 	if collName == "" || projectID == "" || months == "" || topK == "" || bucketName == "" {
-		return Config{}, errors.New("env vars not correctly configure")
+		return Config{}, errors.New("env vars not correctly configured")
 	}
 
 	monthsN, err := strconv.Atoi(months)

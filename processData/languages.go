@@ -114,7 +114,7 @@ const (
 	JSLang     = "JavaScript"
 )
 
-func SynonimizeLanguagePcts(pcts []LangPct) []LangPct {
+func SynonymizeLanguagePcts(pcts []LangPct) []LangPct {
 
 	synonyms := map[string]string{
 		"JSX":             JSLang,

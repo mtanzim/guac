@@ -110,15 +110,17 @@ func languagePct(durations map[string]float64) ([]LangPct, error) {
 const (
 	RestLang   = "Rest"
 	MarkupLang = "Markup and config"
+	TSLang     = "TypeScript"
+	JSLang     = "JavaScript"
 )
 
 func SynonimizeLanguagePcts(pcts []LangPct) []LangPct {
 
 	synonyms := map[string]string{
-		"JSX":             "JavaScript",
-		"JSON":            "JavaScript",
-		"TSX":             "Typescript",
-		"Astro":           "Typescript",
+		"JSX":             JSLang,
+		"JSON":            JSLang,
+		"TSX":             TSLang,
+		"Astro":           TSLang,
 		"YAML":            MarkupLang,
 		"HTML":            MarkupLang,
 		"Text":            MarkupLang,

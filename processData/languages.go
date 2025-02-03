@@ -121,6 +121,7 @@ func SynonymizeLanguagePcts(pcts []LangPct) []LangPct {
 		"JSON":            JSLang,
 		"TSX":             TSLang,
 		"Astro":           TSLang,
+		"Typescript":      TSLang,
 		"YAML":            MarkupLang,
 		"HTML":            MarkupLang,
 		"Text":            MarkupLang,

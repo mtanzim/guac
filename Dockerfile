@@ -1,6 +1,6 @@
 # server dockerfile, deployed from ci on google cloud run
 # when pushed to branch `gcp`
-FROM golang:1.23
+FROM golang:1.24-alpine
 WORKDIR /go/src/app
 COPY go.mod .
 COPY go.sum .

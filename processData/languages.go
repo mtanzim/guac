@@ -93,9 +93,13 @@ func languagePct(durations map[string]float64) ([]LangPct, error) {
 	for _, v := range durations {
 		totalDur += v
 	}
+	if totalDur <= 0.0 {
+		return []LangPct{}, nil
+	}
 	pctTotal := 0.0
 
 	for k, v := range durations {
+
 		curPct := (v / totalDur) * 100.0
 		pctTotal += curPct
 		percentages = append(percentages, LangPct{k, curPct})
